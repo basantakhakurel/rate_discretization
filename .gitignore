@@ -1,3 +1,25 @@
+# some directories to ignore
 /Plots
+/Extra_Plots
+/extra_files
+/LaTeX
+/Simulated
+/output
+/logs_n_err
+/tmp
+
+# mac identifier file
 .DS_Store
+
+# plots
 *.pdf
+
+# output files
+*.out
+*.log
+*.tre
+*.trees
+
+# RevBayes and R history files
+history.txt
+.Rhistory
