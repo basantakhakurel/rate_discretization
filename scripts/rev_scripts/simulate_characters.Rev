@@ -1,0 +1,44 @@
+################################################################################
+# RevBayes Script -- simulating morphological sequences with the Mk model
+#   Authors: Basanta Khakurel
+################################################################################
+
+NUM_REPS = args[1]
+NUM_CATEGORIES = args[2]
+OUTPUT_DIR = args[3]
+MODEL = args[4]
+NUM_SITES = 1000
+N_STATES = 2 # only looking at binary data
+
+# load the starting tree
+starting_tree <- readBranchLengthTrees("data/8taxon.tre")[1]
+
+print("Type of the tree is: " + type(starting_tree))
+
+print("Tree Length of the Simulated Tree is: " + starting_tree.treeLength())
+
+if (MODEL == "discrete") {
+  # simulate the characters
+  print("Simulating morphological characters under the Mk+GAMMA model with " + NUM_CATEGORIES + " categories")
+
+  Q_Mk := fnJC(2)
+
+  H <- abs(ln(10) / (qnorm(0.975) - qnorm(0.025)))
+
+  rates_morpho := fnDiscretizeGamma(H, H, NUM_CATEGORIES)
+
+  seq_MkG ~ dnPhyloCTMC(tree = starting_tree, Q = Q_Mk, siteRates = rates_morpho, type = "Standard", nSites = NUM_SITES, coding = "variable")
+
+  for (i in 1:NUM_REPS) {
+    seq_MkG.redraw()
+    writeNexus(file = "data/" + OUTPUT_DIR + "/sim_" + i + ".nex", seq_MkG)
+    }
+
+  } else if (MODEL == "continuous") {
+    # simulate the characters
+    print("Simulating morphological characters under the Mk model with continuous gamma.")
+
+    print("I don't know how to simulate using continuous distribution.")
+  }
+
+q()
