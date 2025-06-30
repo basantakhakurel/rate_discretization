@@ -14,14 +14,23 @@ OUTPUT_DIR="simulation_screen_outputs"
 # Create output directory
 mkdir -p "${OUTPUT_DIR}"
 
-# Function to run R simulation
-run_r() {
+# Function for discrete simulations
+run_discrete() {
     local categories=$1
     local output_file="${OUTPUT_DIR}/r_${categories}.out"
 
     Rscript scripts/r_scripts/simulate_discreteGamma.r \
         -n ${N_SAMPLES} -c ${categories} \
         > "${output_file}" 2>&1
+}
+
+# function for continuous simulation
+run_continuous() {
+  local output_file="${OUTPUT_DIR}/r_continuous.out"
+
+  Rscript scripts/r_scripts/simulate_continuousGamma.r \
+      -n ${N_SAMPLES} \
+      > "${output_file}" 2>&1
 }
 
 # Function to wait for available job slot
@@ -33,17 +42,21 @@ wait_for_slot() {
 
 # Main execution
 echo "Starting parallel simulations with ${MAX_JOBS} max parallel jobs"
-echo "Output directory: ${OUTPUT_DIR}"
+echo "Screen output can be found in: ${OUTPUT_DIR}"
 
 # Launch all jobs in parallel
 for categories in "${CATEGORIES[@]}"; do
     # Wait for available slot and launch R job
     wait_for_slot
-    run_r $categories &
+    run_discrete $categories &
 done
+
+# Launch continuous simulation
+wait_for_slot
+run_continuous &
 
 # Wait for all jobs to complete
 wait
 
 echo "All simulations completed"
-echo "Output files saved to: ${OUTPUT_DIR}"
+echo "Screen Output saved to: ${OUTPUT_DIR}"

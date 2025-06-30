@@ -8,6 +8,7 @@
 library(optparse, quietly = T)
 library(phangorn, quietly = T)
 library(Claddis, quietly = T)
+library(phytools, quietly = T)
 
 # Parse options
 option_list <- list(
@@ -55,7 +56,8 @@ for (sim in 1:N_REPS) {
   for (i in 1:NCHAR) {
     r <- site_rates[i]
     Q <- matrix(c(-r, r, r, -r), 2, 2, byrow = TRUE, dimnames = list(0:1, 0:1))
-    char_matrix[, i] <- sim.Mk(tree = phylo, Q = Q, nsim = 1)[[1]]
+    char <- sim.Mk(tree = phylo, Q = Q)
+    char_matrix[, i] <- as.numeric(as.character(char))
   }
 
   # Save histogram for distribution of rates
@@ -64,8 +66,8 @@ for (sim in 1:N_REPS) {
   dev.off()
 
   # format matrix for claddis
-  char_matrix <- apply(char_matrix, c(1, 2), as.character)
-  cladistic_matrix <- build_cladistic_matrix(char_matrix,
+  char_df <- apply(char_matrix, c(1, 2), as.character)
+  cladistic_matrix <- build_cladistic_matrix(char_df,
     header = paste("Simulated Dataset using Continuous Gamma -- alpha =", ALPHA)
   )
 
