@@ -68,11 +68,11 @@ for (sim in 1:N_REPS) {
     if (length(idx) == 0) next
     simdat <- sim.Mk(tree = phylo, Q = Q_matrices[[k]], nsim = length(idx))
     if (length(idx) == 1) {
-char_matrix[, idx] <- matrix(as.character(as.numeric(unlist(simdat)) - 1), nrow = length(phylo$tip.label))
+      char_matrix[, idx] <- matrix(as.character(as.numeric(unlist(simdat)) - 1), nrow = length(phylo$tip.label))
     } else {
       # Convert to 0/1 character labels explicitly
-mapped_simdat <- lapply(simdat, function(x) as.character(as.numeric(x) - 1))
-char_matrix[, idx] <- do.call(cbind, mapped_simdat)
+      mapped_simdat <- lapply(simdat, function(x) as.character(as.numeric(x) - 1))
+      char_matrix[, idx] <- do.call(cbind, mapped_simdat)
     }
   }
 
