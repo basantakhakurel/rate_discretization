@@ -27,7 +27,8 @@ opt <- parse_args(opt_parser)
 
 N_REPS <- opt$n_reps
 ALPHA <- opt$alpha
-OUTPUT_DIR <- file.path("data", paste0("sim_cont_", ALPHA))
+# OUTPUT_DIR <- file.path("data", paste0("sim_cont_", ALPHA))
+OUTPUT_DIR <- file.path("data", paste0("sim_cont"))
 RATES_DIR <- file.path(OUTPUT_DIR, "rates")
 
 dir.create(OUTPUT_DIR, recursive = T, showWarnings = F)
