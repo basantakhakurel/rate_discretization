@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Parallel simulation script
-# Usage: ./simulate_parallel.sh [max_parallel_jobs]
+# Usage: ./run_sim_local.sh [max_parallel_jobs]
 
 set -euo pipefail
 

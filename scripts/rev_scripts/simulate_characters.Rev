@@ -27,7 +27,7 @@ if (MODEL == "discrete") {
 
   rates_morpho := fnDiscretizeGamma(H, H, NUM_CATEGORIES)
 
-  seq_MkG ~ dnPhyloCTMC(tree = starting_tree, Q = Q_Mk, siteRates = rates_morpho, type = "Standard", nSites = NUM_SITES, coding = "variable")
+  seq_MkG ~ dnPhyloCTMC(tree = starting_tree, Q = Q_Mk, siteRates = rates_morpho, type = "Standard", nSites = NUM_SITES)
 
   for (i in 1:NUM_REPS) {
     seq_MkG.redraw()
