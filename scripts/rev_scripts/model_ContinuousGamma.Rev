@@ -1,0 +1,46 @@
+# RevBayes Model for continuous Gamma among-site rate variaion
+# Authors: Basanta Khakurel, Alessio Capobianco, and Sebastian Hoehna
+
+relative_rates_prenorm <- rep(1, data.nchar())
+
+for (i in 1:data.nchar()) {
+  temp <- data
+  temp.excludeCharacter(1:data.nchar())
+  temp.includeCharacter(i)
+  temp.removeExcludedCharacters()
+  char[i] <- temp
+
+  sf[i] <- simplex(rep(1, char[i].maxStates()))
+  Q[i] := fnF81(sf[i])
+}
+
+# alpha for gamma distribution
+alpha ~ dnUniform(0.0, 1E8)
+alpha.setValue(1.0)
+
+# add moves for the alpha parameter
+moves.append(mvScale(alpha, lambda=0.1, tune=true, weight=4.0))
+
+for (i in 1:data.nchar()) {
+    relative_rates_prenorm[i] ~ dnGamma(alpha, alpha)
+    moves.append(mvScale(relative_rates_prenorm[i], lambda=0.1, tune=true, weight=1.0))
+}
+
+moves.append(mvVectorScale(relative_rates_prenorm, tune=true, weight=4.0))
+moves.append(mvShrinkExpand(relative_rates_prenorm, tune=true, weight=4.0))
+
+avmvn_gamma = mvAVMVN(waitBeforeLearning=200, waitBeforeUsing=1000, maxUpdates=10000, weight=5)
+for (i in 1:data.nchar()) {
+    avmvn_gamma.addVariable(relative_rates_prenorm[i])
+}
+avmvn_gamma.addVariable(alpha)
+moves.append(avmvn_gamma)
+
+# normalize the rates to 1
+relative_rates := relative_rates_prenorm / mean (relative_rates_prenorm)
+
+# loop over the characters
+for (i in 1:char.size()) {
+    phyloSeq[i] ~ dnPhyloCTMC(tree=phylogeny, Q=Q[i], branchRates=relative_rates[i], type="Standard")
+    phyloSeq[i].clamp(char[i])
+}
