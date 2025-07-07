@@ -1,18 +1,7 @@
 # RevBayes Model for discrete Gamma among-site rate variaion
 # Authors: Basanta Khakurel, Alessio Capobianco, and Sebastian Hoehna
 
-relative_rates <- rep(1, data.nchar())
-
-for (i in 1:data.nchar()) {
-  temp <- data
-  temp.excludeCharacter(1:data.nchar())
-  temp.includeCharacter(i)
-  temp.removeExcludedCharacters()
-  char[i] <- temp
-
-  sf[i] <- simplex(rep(1, char[i].maxStates()))
-  Q[i] := fnF81(sf[i])
-}
+Q <- fnJC( 2 )
 
 # Set up Gamma-distributed rate variation.
 alpha ~ dnUniform(0.0, 1E8)
@@ -25,7 +14,5 @@ site_rates := fnDiscretizeGamma(alpha, alpha, NUM_CATEGORIES)
 moves.append(mvScale(alpha, lambda=0.01, weight=4.0, tune=true))
 
 # loop over the characters
-for (i in 1:char.size()) {
-    phyloSeq[i] ~ dnPhyloCTMC(tree=phylogeny, Q=Q[i], branchRates=relative_rates[i], siteRates=site_rates, type="Standard")
-    phyloSeq[i].clamp(char[i])
-}
+phyloSeq ~ dnPhyloCTMC(tree=phylogeny, Q=Q, siteRates=site_rates, type="Standard")
+phyloSeq.clamp(data)

@@ -9,10 +9,9 @@ for (i in 1:data.nchar()) {
   temp.includeCharacter(i)
   temp.removeExcludedCharacters()
   char[i] <- temp
-
-  sf[i] <- simplex(rep(1, char[i].maxStates()))
-  Q[i] := fnF81(sf[i])
 }
+
+Q <- fnJC(2)
 
 # alpha for gamma distribution
 alpha ~ dnUniform(0.0, 1E8)
@@ -41,6 +40,6 @@ relative_rates := relative_rates_prenorm / mean (relative_rates_prenorm)
 
 # loop over the characters
 for (i in 1:char.size()) {
-    phyloSeq[i] ~ dnPhyloCTMC(tree=phylogeny, Q=Q[i], branchRates=relative_rates[i], type="Standard")
+    phyloSeq[i] ~ dnPhyloCTMC(tree=phylogeny, Q=Q, branchRates=relative_rates[i], type="Standard")
     phyloSeq[i].clamp(char[i])
 }
