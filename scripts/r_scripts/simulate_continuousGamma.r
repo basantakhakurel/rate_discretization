@@ -42,7 +42,7 @@ cat("Simulating", N_REPS, "datasets with continuous gamma (alpha =", ALPHA, ")\n
 phylo <- read.tree("data/8taxon.tre")
 
 # Constants
-NCHAR <- 1000
+NCHAR <- 100000
 
 for (sim in 1:N_REPS) {
   cat("Simulating replicate", sim, "...\n")
