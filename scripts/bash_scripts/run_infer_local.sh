@@ -6,11 +6,11 @@
 set -euo pipefail
 
 # Configuration
-TRUE_CATEGORIES=(2 4 6 8 16 100 "cont")
-INFERRED_CATEGORIES=(0 2 4 6 8 16 100)
+TRUE_CATEGORIES=(2 4 8 "cont")
+INFERRED_CATEGORIES=(2 4 6 8 16 100)
 N_REPS=2
-N_CHAINS=1
-MAX_JOBS=${1:-$(nproc)}
+N_CHAINS=2
+MAX_JOBS=3
 SCRIPT="scripts/rev_scripts/mcmc.Rev"
 OUTPUT_DIR="inference_screen_outputs"
 
@@ -30,7 +30,7 @@ run_mcmc() {
     fi
 
     local output_name="output_sim_${true_cat}cats_inf_${inf_cat}cats"
-    local log_file="${OUTPUT_DIR}/${output_name}_sim${sim}.log"
+    local log_file="${OUTPUT_DIR}/${output_name}_sim${sim}.out"
 
     echo "Launching sim ${sim} | true=${true_cat}, inf=${inf_cat}"
 

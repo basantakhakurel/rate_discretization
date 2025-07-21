@@ -6,9 +6,10 @@
 set -euo pipefail
 
 # Configuration
-CATEGORIES=(2 4 6 8 16 100)
-N_SAMPLES=20
-MAX_JOBS=${1:-$(nproc)}
+CATEGORIES=(2 4 8)
+N_SAMPLES=2
+#MAX_JOBS=${1:-$(nproc)}
+MAX_JOBS=4
 OUTPUT_DIR="simulation_screen_outputs"
 
 # Create output directory
