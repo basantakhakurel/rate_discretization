@@ -46,19 +46,28 @@ phylo <- read.tree("data/8taxon.tre")
 # Constants
 NCHAR <- 100000
 H <- abs(log(10) / (qnorm(0.975) - qnorm(0.025)))
+
 # this gives the mean of the gamma distribution
 # gammaCats <- discrete.gamma(alpha = H, k = NUM_CATEGORIES)
 
 # median-based gamma rates
-discrete.gamma.median <- function(alpha, k) {
-  probs <- seq(0, 1, length.out = k + 1)
-  mids <- (probs[-1] + probs[-(k + 1)]) / 2
-  raw_rates <- qgamma(mids, shape = alpha, scale = 1 / alpha)
-  normalized_rates <- raw_rates / mean(raw_rates)
-  return(normalized_rates)
+# discrete.gamma.median <- function(alpha, k) {
+#   probs <- seq(0, 1, length.out = k + 1)
+#   mids <- (probs[-1] + probs[-(k + 1)]) / 2
+#   raw_rates <- qgamma(mids, shape = alpha, scale = 1 / alpha)
+#   normalized_rates <- raw_rates / mean(raw_rates)
+#   return(normalized_rates)
+# }
+
+# gammaCats <- discrete.gamma.median(alpha = H, k = NUM_CATEGORIES)
+
+discrete.gamma.quantile <- function(alpha, k) {
+  quantiles <- (1:k) / (k + 1)
+  rates <- qgamma(quantiles, shape = alpha, rate = alpha)
+  return(rates / mean(rates))
 }
 
-gammaCats <- discrete.gamma.median(alpha = H, k = NUM_CATEGORIES)
+gammaCats <- discrete.gamma.quantile(alpha = H, k = NUM_CATEGORIES)
 
 # computing Q-matrix per rate category
 Q_matrices <- lapply(gammaCats, function(r) {
