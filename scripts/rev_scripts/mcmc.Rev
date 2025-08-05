@@ -5,7 +5,7 @@
 DATASET = args[1]
 # directory of the dataset
 DATASET_DIR = args[2]
-# model (DiscreteGamma or ContinuousGamma)
+# model
 MODEL = args[3]
 # output directory
 OUTPUT_DIR = args[4]
@@ -55,7 +55,7 @@ monitors.append(mnScreen(printgen = 1000))
 
 # initialize MCMC
 mymcmc = mcmc(mymodel, monitors, moves, nruns = NUM_RUNS, combine = "mixed")
-mymcmc.run(generations = 30000, tuningInterval = 100)
+mymcmc.run(generations = 50000, tuningInterval = 100)
 mymcmc.operatorSummary()
 
 # summarizing the tree

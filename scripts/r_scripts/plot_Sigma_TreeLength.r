@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-# R script to plot the posteriors
+# R script to plot the posteriors from lognormal simulations
 # Authors: Basanta Khakurel, Alessio Capobianco, and Sebastian Höhna
 # date: 2025-07-08
 
@@ -16,9 +16,10 @@ set_pilot_family(family = "Montserrat")
 
 # Configuration of plots and simulation settings
 CONFIG <- list(
-  true_alpha = 0.58,
+  true_sigma = 0.587,
   true_tree_length = 1.133,
-  factor_levels = c("100", "16", "8", "6", "4", "2"),
+  burnin = 250, # 0.25%
+  factor_levels = c("31", "15", "7", "5", "3"),
   plot_settings = list(
     scale = 1,
     alpha = 0.7,
@@ -34,8 +35,8 @@ CONFIG <- list(
 
 # Load and combine data from all simulation types
 load_all_simulation_data <- function(filename) {
-  sim_types <- c("2cats", "4cats", "8cats", "contcats")
-  sim_labels <- c("k=2", "k=4", "k=8", "k=cont")
+  sim_types <- c("3cats", "7cats", "15cats", "31cats")
+  sim_labels <- c("k=3", "k=7", "k=15", "k=31")
 
   all_data <- list()
 
@@ -43,13 +44,13 @@ load_all_simulation_data <- function(filename) {
     sim_type <- sim_types[i]
     sim_label <- sim_labels[i]
 
-    output_dirs <- paste0("output_sim_", sim_type, "_inf_", c(2, 4, 6, 8, 16, 100), "cats")
+    output_dirs <- paste0("output_sim_", sim_type, "_inf_", c(3, 5, 7, 15, 31), "cats")
 
-    alpha_list <- list()
+    sigma_list <- list()
     tree_length <- list()
 
     for (output_dir in output_dirs) {
-      log_path <- file.path("results_sim-median_inf-mean", output_dir)
+      log_path <- file.path("results_sim-lognormal_inf-lognormal", output_dir)
 
       logfiles <- list.files(log_path, pattern = "\\.log$", full.names = TRUE)
       logfile <- logfiles[grepl(filename, logfiles, fixed = TRUE) & !grepl("run", logfiles)]
@@ -58,7 +59,10 @@ load_all_simulation_data <- function(filename) {
         tryCatch(
           {
             data <- read.delim(logfile[1]) # Take first match if multiple found
-            alpha_list[[output_dir]] <- data$alpha
+            if (CONFIG$burnin > 0) {
+              data <- data[-seq_len(CONFIG$burnin),]
+            }
+            sigma_list[[output_dir]] <- data$sigma
             tree_length[[output_dir]] <- data$tree_length
           },
           error = function(e) {
@@ -69,11 +73,11 @@ load_all_simulation_data <- function(filename) {
     }
 
     # Combine data for simulation type
-    if (length(alpha_list) > 0) {
+    if (length(sigma_list) > 0) {
       sim_data <- bind_rows(
-        lapply(names(alpha_list), function(dir) {
+        lapply(names(sigma_list), function(dir) {
           data.frame(
-            alpha = alpha_list[[dir]],
+            sigma = sigma_list[[dir]],
             tree_length = tree_length[[dir]],
             output_dir = dir,
             sim_type = sim_label,
@@ -108,7 +112,7 @@ generate_faceted_plots <- function(filename) {
 
   if (nrow(data) == 0) {
     warning("No data found for any simulation type")
-    return(list(alpha = NULL, treeLength = NULL))
+    return(list(sigma = NULL, treeLength = NULL))
   }
 
   # Base plot theme
@@ -122,10 +126,10 @@ generate_faceted_plots <- function(filename) {
       strip.text = element_text(size = CONFIG$plot_settings$axis_text_size)
     )
 
-  # Alpha plot with facets
-  alpha_plot <- data %>%
+  # Sigma plot with facets
+  sigma_plot <- data %>%
     filter(output_dir %in% CONFIG$factor_levels) %>%
-    ggplot(aes(x = alpha, y = output_dir)) +
+    ggplot(aes(x = sigma, y = output_dir)) +
     stat_binline(
       scale = CONFIG$plot_settings$scale,
       alpha = CONFIG$plot_settings$alpha,
@@ -133,13 +137,13 @@ generate_faceted_plots <- function(filename) {
       draw_baseline = FALSE
     ) +
     geom_vline(
-      xintercept = CONFIG$true_alpha,
+      xintercept = CONFIG$true_sigma,
       linetype = "dashed",
       color = "red",
       linewidth = 0.7
     ) +
-    scale_x_continuous(limits = c(0.4, 1), breaks = seq(0.4, 1, 0.2)) +
-    labs(x = "Alpha", y = "Number of Rate Categories") +
+    scale_x_continuous(limits = c(0.4, 0.8), breaks = seq(0.4, 1, 0.2)) +
+    labs(x = "Standard Deviation", y = "Number of Rate Categories") +
     facet_grid(~sim_type) +
     base_theme +
     coord_cartesian(clip = "off")
@@ -166,36 +170,36 @@ generate_faceted_plots <- function(filename) {
     base_theme +
     coord_cartesian(clip = "off")
 
-  return(list(alpha = alpha_plot, treeLength = tree_length_plot))
+  return(list(sigma = sigma_plot, treeLength = tree_length_plot))
 }
 
 #' Main function to generate faceted plots and save them
 #' @param filename Character string for the specific log file to process (default: "sim_1")
-#' @param output_dir Character string for output directory (default: current directory)
-main <- function(filename = "sim_1", output_dir = "Plots") {
+#' @param output_dir Character string for output directory (default: "Plots")
+main <- function(filename = "sim_1", plot_output_dir = "Plots") {
   cat("Processing all simulation types with faceted plots...\n")
 
   # Generate faceted plots
   plots <- generate_faceted_plots(filename)
 
   # Save alpha plot
-  if (!is.null(plots$alpha)) {
-    alpha_output <- file.path(output_dir, paste0(filename, "_alpha_plot.pdf"))
+  if (!is.null(plots$sigma)) {
+    sigma_output <- file.path(plot_output_dir, paste0(filename, "_sigma_plot.pdf"))
     ggsave(
-      alpha_output,
-      plots$alpha,
+      sigma_output,
+      plots$sigma,
       width = CONFIG$plot_settings$output_width,
       height = CONFIG$plot_settings$output_height,
       units = "in",
       dpi = CONFIG$plot_settings$dpi,
       device = cairo_pdf
     )
-    cat("Alpha plot saved to:", alpha_output, "\n")
+    cat("Sigma plot saved to:", sigma_output, "\n")
   }
 
   # Save tree length plot
   if (!is.null(plots$treeLength)) {
-    tree_length_output <- file.path(output_dir, paste0(filename, "_treeLength_plot.pdf"))
+    tree_length_output <- file.path(plot_output_dir, paste0(filename, "_treeLength_plot.pdf"))
     ggsave(
       tree_length_output,
       plots$treeLength,
@@ -216,18 +220,18 @@ args <- commandArgs(trailingOnly = TRUE)
 
 # Set defaults if no arguments provided
 filename <- if (length(args) > 0) args[1] else "sim_1"
-output_dir <- if (length(args) > 1) args[2] else "Plots"
+plot_output_dir <- if (length(args) > 1) args[2] else "Plots"
 
 # Create output directory if it doesn't exist
-if (!dir.exists(output_dir)) {
-  dir.create(output_dir, recursive = TRUE)
-  cat("Created output directory:", output_dir, "\n")
+if (!dir.exists(plot_output_dir)) {
+  dir.create(plot_output_dir, recursive = TRUE)
+  cat("Created output directory:", plot_output_dir, "\n")
 }
 
 # Run main function
 cat("Starting plot generation...\n")
 cat("Input filename:", filename, "\n")
-cat("Output directory:", output_dir, "\n")
+cat("Plot saved in directory:", plot_output_dir, "\n")
 
-result <- main(filename, output_dir)
+result <- main(filename, plot_output_dir)
 cat("Script completed successfully!\n")

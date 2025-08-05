@@ -8,6 +8,8 @@
 /logs_n_err
 /tmp
 **/sim_*/**
+/Junk_Output
+
 
 # mac identifier file
 .DS_Store

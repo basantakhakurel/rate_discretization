@@ -1,0 +1,26 @@
+# RevBayes Model for discrete Lognormal among-site rate variaion
+# Authors: Basanta Khakurel, Alessio Capobianco, and Sebastian Hoehna
+
+Q <- fnJC(2)
+
+# inializing the standard deviation of the distribution
+sigma <- 1
+
+# using a flat prior on standard deviation
+inv_sigma ~ dnUniform(0, 1E3)
+inv_sigma.setValue(1)
+
+# moves on inverse of standard deviation
+moves.append(mvScale(inv_sigma, lambda = 0.1, tune = true, weight = 4))
+
+# finally use the inverse of standard deviation
+sigma := 1/inv_sigma
+
+mean := (-0.5*sigma*sigma)
+
+# obtain the rate scalars from a normalized distribution such that the rates add up to the total number of categories
+site_rates := normalize(fnDiscretizeDistribution(dnLognormal(mean, sigma), NUM_CATEGORIES))
+
+# loop over the characters
+phyloSeq ~ dnPhyloCTMC(tree=phylogeny, Q=Q, siteRates=site_rates, type="Standard")
+phyloSeq.clamp(data)
