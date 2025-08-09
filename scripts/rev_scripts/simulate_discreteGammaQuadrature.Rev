@@ -23,9 +23,13 @@ Q_Mk := fnJC(2)
 
 alpha <- abs(ln(10) / (qnorm(0.975) - qnorm(0.025)))
 
-rates_morpho := normalize(fnDiscretizeGammaQuadrature(alpha, alpha, NUM_CATEGORIES)[1])
+rates := fnDiscretizeGammaQuadrature(alpha, alpha, NUM_CATEGORIES)
 
-seq_MkG ~ dnPhyloCTMC(tree = starting_tree, Q = Q_Mk, siteRates = rates_morpho, type = "Standard", nSites = NUM_SITES)
+site_rates := rates[1]
+
+weights_morpho := rates[2]
+
+seq_MkG ~ dnPhyloCTMC(tree = starting_tree, Q = Q_Mk, siteRates = site_rates, siteRatesProbs = weights_morpho, type = "Standard", nSites = NUM_SITES)
 
 for (i in 1:NUM_REPS) {
   seq_MkG.redraw()

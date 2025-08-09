@@ -16,6 +16,9 @@ moves.append(mvScale(inv_sigma, lambda = 0.1, tune = true, weight = 4))
 # finally use the inverse of standard deviation
 sigma := 1/inv_sigma
 
+# to make the mean in real space = 1 we set the mean of the lognormal distribution to -0.5*sigma^2
+# this is because the mean of a lognormal distribution is exp(mean + 0.5*sigma^2)
+# so we want exp(-0.5*sigma^2 + 0.5*sigma^2) = exp(0) = 1
 mean := (-0.5*sigma*sigma)
 
 # obtain the rate scalars from a normalized distribution such that the rates add up to the total number of categories

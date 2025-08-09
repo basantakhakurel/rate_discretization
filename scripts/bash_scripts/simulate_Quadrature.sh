@@ -9,8 +9,8 @@ set -euo pipefail
 CATEGORIES=(2 4 8)
 N_SAMPLES=2
 #MAX_JOBS=${1:-$(nproc)}
-MAX_JOBS=4
-OUTPUT_DIR="simulation_screen_outputs"
+MAX_JOBS=3
+OUTPUT_DIR="Quadrature_Simulations_ScreenOutput"
 
 # Create output directory
 mkdir -p "${OUTPUT_DIR}"
@@ -20,8 +20,8 @@ run_discrete() {
     local categories=$1
     local output_file="${OUTPUT_DIR}/r_${categories}.out"
 
-    Rscript scripts/r_scripts/simulate_discreteGamma.r \
-        -n ${N_SAMPLES} -c ${categories} \
+    rb-mpi scripts/rev_scripts/simulate_discreteGammaQuadrature.Rev \
+        --args ${N_SAMPLES} ${categories} sim_Quad_${categories} DG \
         > "${output_file}" 2>&1
 }
 
@@ -53,8 +53,8 @@ for categories in "${CATEGORIES[@]}"; do
 done
 
 # Launch continuous simulation
-wait_for_slot
-run_continuous &
+# wait_for_slot
+# run_continuous &
 
 # Wait for all jobs to complete
 wait
