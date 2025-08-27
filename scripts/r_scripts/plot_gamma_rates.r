@@ -109,28 +109,53 @@ make_faceted_plot <- function(data, title) {
 # Generate all plots
 faceted_plot_mean <- make_faceted_plot(
   all_discretizations_mean,
-  "Mean discretization approach"
+  "Mean discretization"
 )
 
 faceted_plot_median <- make_faceted_plot(
   all_discretizations_median,
-  "Median discretization approach"
+  "Median discretization"
 )
 
+
+# mean_plot_labeled <- faceted_plot_mean +
+#   labs(tag = "a)") +
+#   theme(plot.tag = element_text(size = 20, face = "bold", hjust = 0, vjust = 0, family = "Montserrat"))
+
+# median_plot_labeled <- faceted_plot_median +
+#   labs(tag = "b)") +
+#   theme(plot.tag = element_text(size = 20, face = "bold", hjust = 0, vjust = 0, family = "Montserrat"))
+
+
 # Mean version
-ggsave("Plots/gamma_mean.pdf", faceted_plot_mean,
+ggsave("Plots/gamma_mean.pdf", mean_plot_labeled,
   device = cairo_pdf, width = 12, height = 10, dpi = 450, bg = "white"
 )
-ggsave("Plots/gamma_mean.png", faceted_plot_mean,
+ggsave("Plots/gamma_mean.png", mean_plot_labeled,
   width = 16, height = 13, dpi = 450, bg = "white"
 )
 
 # Median version
-ggsave("Plots/gamma_median.pdf", faceted_plot_median,
+ggsave("Plots/gamma_median.pdf", median_plot_labeled,
   device = cairo_pdf, width = 12, height = 10, dpi = 450, bg = "white"
 )
-ggsave("Plots/gamma_median.png", faceted_plot_median,
+ggsave("Plots/gamma_median.png", median_plot_labeled,
   width = 16, height = 13, dpi = 450, bg = "white"
 )
 
 print("Plots saved successfully!")
+
+
+library(patchwork)
+
+final_plot <- mean_plot_labeled + median_plot_labeled +
+  plot_annotation(
+    tag_levels = "A",
+    theme = theme(plot.title = element_text(size = 24, face = "bold", family = "Montserrat"))
+  )
+
+final_plot + canvas(24, 10)
+
+ggsave("Plots/gamma_discretization.pdf", final_plot,
+  device = cairo_pdf, width = 20, height = 8, dpi = 450, bg = "white"
+)
