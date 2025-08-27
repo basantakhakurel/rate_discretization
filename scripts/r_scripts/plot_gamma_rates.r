@@ -101,7 +101,8 @@ make_faceted_plot <- function(data, title) {
     theme(
       plot.title = element_text(hjust = 0.5),
       axis.text.y = element_blank(),
-      axis.ticks.y = element_blank()
+      axis.ticks.y = element_blank(),
+      strip.text = element_text(face = "plain")
     )
 }
 
