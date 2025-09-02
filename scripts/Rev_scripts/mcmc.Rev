@@ -1,0 +1,75 @@
+# RevBayes script: Main MCMC script
+# Authors: Basanta Khakurel, Alessio Capobianco, and Sebastian Höhna
+# Date: 2025-09-02
+# Usage: mpirun -np <NUM_PROCESSORS> rb-mpi --file scripts/rev_scripts/mcmc.Rev --args <DATA_NAAME> <DATA_DIRECTORY> <MODEL> <OUTPUT_DIRECTORY> <NUM_MCMC_CHAINS> <NUMBER_OF_CATEGORIES>
+
+
+# name of the dataset without extension (.nex is assumed)
+DATASET = args[1]
+# directory of the dataset
+DATASET_DIR = args[2]
+# model
+MODEL = args[3]
+# output directory
+OUTPUT_DIR = args[4]
+
+# number of MCMC chains to run
+if (args.size() > 4) {
+  NUM_RUNS = args[5]
+} else
+  NUM_RUNS = 2
+
+# number of rate categories if Discrete
+if (args.size() > 5) {
+  NUM_CATEGORIES = args[6]
+} else
+  NUM_CATEGORIES = 2
+
+# read in the data matrix
+data <- readDiscreteCharacterData("data/"+ DATASET_DIR + "/" + DATASET + ".nex")
+
+# helpers
+taxa <- data.names()
+n_taxa <- taxa.size()
+n_branches <- 2 * n_taxa - 3
+
+# vectors for moves and monitors
+moves = VectorMoves()
+monitors = VectorMonitors()
+
+# tree model
+source("scripts/rev_scripts/model_UniformTree.Rev")
+
+# # substitution model with among-character rate variation model (discreteGammaMean, discreteGammaMedian, discreteLognormalMedian)
+source("scripts/rev_scripts/model_" + MODEL + ".Rev")
+
+# MCMC
+mymodel = model(phylogeny)
+
+# Monitors
+# for the full model
+monitors.append(mnModel(filename = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.log", printgen = 100))
+
+# for trees
+monitors.append(mnFile(filename = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.trees", printgen = 100, phylogeny))
+
+# for the screen
+monitors.append(mnScreen(printgen = 1000))
+
+# initialize MCMC
+mymcmc = mcmc(mymodel, monitors, moves, nruns = NUM_RUNS, combine = "mixed")
+mymcmc.run(generations = 50000, tuningInterval = 100)
+mymcmc.operatorSummary()
+
+# summarizing the tree
+# read in the tree
+trace = readTreeTrace(OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.trees", treetype = "non-clock", nruns = NUM_RUNS, burnin = 0.25)
+
+# maximum `a posteriori` tree
+mapTree(trace, file = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.map.tre")
+
+# maximum clade credibility tree
+mccTree(trace, file = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.mcc.tre")
+
+# exit RevBayes
+quit()
