@@ -9,6 +9,7 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(ggridges)
   library(pilot)
+  library(extrafont)
 })
 
 # Set font family
@@ -19,7 +20,7 @@ CONFIG <- list(
   true_sigma = 0.587,
   true_tree_length = 1.133,
   burnin = 250, # 0.25%
-  factor_levels = c("31", "15", "7", "5", "3"),
+  factor_levels = c("100", "16", "8", "6", "4", "2"),
   plot_settings = list(
     scale = 1,
     alpha = 0.7,
@@ -35,8 +36,8 @@ CONFIG <- list(
 
 # Load and combine data from all simulation types
 load_all_simulation_data <- function(filename) {
-  sim_types <- c("3cats", "7cats", "15cats", "31cats")
-  sim_labels <- c("k=3", "k=7", "k=15", "k=31")
+  sim_types <- c("2cats", "4cats", "8cats")
+  sim_labels <- c("k=2", "k=4", "k=8")
 
   all_data <- list()
 
@@ -44,13 +45,13 @@ load_all_simulation_data <- function(filename) {
     sim_type <- sim_types[i]
     sim_label <- sim_labels[i]
 
-    output_dirs <- paste0("output_sim_", sim_type, "_inf_", c(3, 5, 7, 15, 31), "cats")
+    output_dirs <- paste0("outputLognormal_sim_", sim_type, "_inf_", c(2, 4, 6, 8, 16, 100), "cats")
 
     sigma_list <- list()
     tree_length <- list()
 
     for (output_dir in output_dirs) {
-      log_path <- file.path("results_sim-lognormal_inf-lognormal", output_dir)
+      log_path <- file.path("res-unnormalized-lognormal", output_dir)
 
       logfiles <- list.files(log_path, pattern = "\\.log$", full.names = TRUE)
       logfile <- logfiles[grepl(filename, logfiles, fixed = TRUE) & !grepl("run", logfiles)]

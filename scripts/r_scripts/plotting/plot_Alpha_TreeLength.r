@@ -9,6 +9,7 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(ggridges)
   library(pilot)
+  library(extrafont)
 })
 
 # Set font family
@@ -35,8 +36,8 @@ CONFIG <- list(
 
 # Load and combine data from all simulation types
 load_all_simulation_data <- function(filename) {
-  sim_types <- c("2cats", "4cats", "8cats", "contcats")
-  sim_labels <- c("k=2", "k=4", "k=8", "k=cont")
+  sim_types <- c("2cats", "4cats", "8cats")
+  sim_labels <- c("k=2", "k=4", "k=8")
 
   all_data <- list()
 
@@ -44,13 +45,13 @@ load_all_simulation_data <- function(filename) {
     sim_type <- sim_types[i]
     sim_label <- sim_labels[i]
 
-    output_dirs <- paste0("output_sim_", sim_type, "_inf_", c(2, 4, 6, 8, 16, 100), "cats")
+    output_dirs <- paste0("outputGamma_sim_", sim_type, "_inf_", c(2, 4, 6, 8, 16, 100), "cats")
 
     alpha_list <- list()
     tree_length <- list()
 
     for (output_dir in output_dirs) {
-      log_path <- file.path("results_sim-median_inf-mean", output_dir)
+      log_path <- file.path("res-unnormalized-gamma", output_dir)
 
       logfiles <- list.files(log_path, pattern = "\\.log$", full.names = TRUE)
       logfile <- logfiles[grepl(filename, logfiles, fixed = TRUE) & !grepl("run", logfiles)]
@@ -142,7 +143,7 @@ generate_faceted_plots <- function(filename) {
       color = "red",
       linewidth = 0.7
     ) +
-    scale_x_continuous(limits = c(0.4, 1), breaks = seq(0.4, 1, 0.2)) +
+    # scale_x_continuous(limits = c(0.4, 1), breaks = seq(0.4, 1, 0.2)) +
     labs(x = "Alpha", y = "Number of Rate Categories") +
     facet_grid(~sim_type) +
     base_theme +
@@ -164,7 +165,7 @@ generate_faceted_plots <- function(filename) {
       color = "blue",
       linewidth = 0.7
     ) +
-    scale_x_continuous(limits = c(0.8, 1.5)) +
+    # scale_x_continuous(limits = c(0.8, 1.5)) +
     labs(x = "Tree Length", y = "Number of Rate Categories") +
     facet_grid(~sim_type) +
     base_theme +

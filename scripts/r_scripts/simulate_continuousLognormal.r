@@ -22,6 +22,10 @@ option_list <- list(
   make_option(c("-s", "--sigma"),
     type = "double", default = DEFAULT_SIGMA,
     help = "Sigma parameter (sdlog) for lognormal distribution", metavar = "number"
+  ),
+  make_option(c("-o", "--output_dir"),
+    type = "character", default = "sim_Lognormal_Cont",
+    help = "Output directory", metavar = "directory"
   )
 )
 
@@ -30,11 +34,7 @@ opt <- parse_args(opt_parser)
 
 N_REPS <- opt$n_reps
 SIGMA <- opt$sigma
-
-# Ensure mean(site_rates) ~ 1 by setting meanlog accordingly
-MEANLOG <- -0.5 * SIGMA * SIGMA
-
-OUTPUT_DIR <- file.path("data", paste0("sim_cont_lognormal"))
+OUTPUT_DIR <- opt$output_dir
 RATES_DIR <- file.path(OUTPUT_DIR, "rates")
 
 dir.create(OUTPUT_DIR, recursive = T, showWarnings = F)
@@ -49,6 +49,8 @@ phylo <- read.tree("data/8taxon.tre")
 
 # Constants
 NCHAR <- 100000
+# Ensure mean(site_rates) ~ 1 by setting meanlog accordingly
+MEANLOG <- -0.5 * SIGMA * SIGMA
 
 for (sim in 1:N_REPS) {
   cat("Simulating replicate", sim, "...\n")

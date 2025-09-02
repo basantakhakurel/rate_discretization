@@ -154,8 +154,6 @@ final_plot <- mean_plot_labeled + median_plot_labeled +
     theme = theme(plot.title = element_text(size = 24, face = "bold", family = "Montserrat"))
   )
 
-final_plot + canvas(24, 10)
-
 ggsave("Plots/gamma_discretization.pdf", final_plot,
   device = cairo_pdf, width = 20, height = 8, dpi = 450, bg = "white"
 )

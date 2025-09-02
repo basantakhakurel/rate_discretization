@@ -22,6 +22,10 @@ option_list <- list(
   make_option(c("-a", "--alpha"),
     type = "double", default = DEFAULT_ALPHA,
     help = "Alpha parameter for gamma distribution", metavar = "number"
+  ),
+  make_option(c("-o", "--output_dir"),
+    type = "character", default = "sim_Gamma_Cont",
+    help = "Output directory", metavar = "directory"
   )
 )
 
@@ -30,8 +34,7 @@ opt <- parse_args(opt_parser)
 
 N_REPS <- opt$n_reps
 ALPHA <- opt$alpha
-# OUTPUT_DIR <- file.path("data", paste0("sim_cont_", ALPHA))
-OUTPUT_DIR <- file.path("data", paste0("sim_cont"))
+OUTPUT_DIR <- opt$output_dir
 RATES_DIR <- file.path(OUTPUT_DIR, "rates")
 
 dir.create(OUTPUT_DIR, recursive = T, showWarnings = F)
