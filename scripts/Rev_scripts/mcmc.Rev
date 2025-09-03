@@ -54,11 +54,11 @@ monitors.append(mnModel(filename = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_
 monitors.append(mnFile(filename = OUTPUT_DIR + "/" + DATASET + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.trees", printgen = 100, phylogeny))
 
 # for the screen
-monitors.append(mnScreen(printgen = 1000))
+monitors.append(mnScreen(printgen = 2000))
 
 # initialize MCMC
 mymcmc = mcmc(mymodel, monitors, moves, nruns = NUM_RUNS, combine = "mixed")
-mymcmc.run(generations = 50000, tuningInterval = 100)
+mymcmc.run(generations = 80000, tuningInterval = 100)
 mymcmc.operatorSummary()
 
 # summarizing the tree
