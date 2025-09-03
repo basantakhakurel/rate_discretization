@@ -32,4 +32,6 @@ for (i in 1:NUM_REPS) {
   writeNexus(file = "data/" + OUTPUT_DIR + "/sim_" + i + ".nex", seq_MkG)
   }
 
+print("Simulation complete! The data can be found in " + OUTPUT_DIR + " directory.")
+
 q()

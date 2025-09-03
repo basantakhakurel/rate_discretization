@@ -38,10 +38,10 @@ moves = VectorMoves()
 monitors = VectorMonitors()
 
 # tree model
-source("scripts/rev_scripts/model_UniformTree.Rev")
+source("scripts/Rev_scripts/model_UniformTree.Rev")
 
 # # substitution model with among-character rate variation model (discreteGammaMean, discreteGammaMedian, discreteLognormalMedian)
-source("scripts/rev_scripts/model_" + MODEL + ".Rev")
+source("scripts/Rev_scripts/model_" + MODEL + ".Rev")
 
 # MCMC
 mymodel = model(phylogeny)
