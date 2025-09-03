@@ -7,7 +7,6 @@
 NUM_REPS = args[1]
 NUM_CATEGORIES = args[2]
 OUTPUT_DIR = args[3]
-MODEL = args[4]
 NUM_SITES = 100000
 N_STATES = 2 # only looking at binary data
 
@@ -34,5 +33,7 @@ for (i in 1:NUM_REPS) {
   seq_MkG.redraw()
   writeNexus(file = "data/" + OUTPUT_DIR + "/sim_" + i + ".nex", seq_MkG)
   }
+
+print("Simulation complete! The data can be found in " + OUTPUT_DIR + " directory.")
 
 q()
