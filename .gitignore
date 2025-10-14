@@ -16,6 +16,7 @@ slurm_*
 
 # plots
 *.pdf
+*.png
 
 # output files
 *.out
