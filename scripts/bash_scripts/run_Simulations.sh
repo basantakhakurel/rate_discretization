@@ -51,7 +51,7 @@ run_discrete_simulation() {
 
     echo "-> Starting: ${sim_name} with ${categories} categories. Log: ${log_file}"
 
-    rb "${script_path}" --args "${N_REPS}" "${categories}" "${rb_output_arg}" > "${log_file}" 2>&1
+    rb "${script_path}" "${N_REPS}" "${categories}" "${rb_output_arg}" > "${log_file}" 2>&1
 }
 
 # function to run the continuous Gamma simulation using R

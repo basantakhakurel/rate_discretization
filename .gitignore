@@ -9,7 +9,7 @@
 /tmp
 **/sim_*/**
 /Junk_Output
-
+slurm_*
 
 # mac identifier file
 .DS_Store
@@ -19,6 +19,7 @@
 
 # output files
 *.out
+*.err
 *.log
 *.tre
 *.trees

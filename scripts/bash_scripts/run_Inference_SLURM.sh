@@ -8,7 +8,7 @@
 set -euo pipefail
 
 # Number of simulation replicates
-N_REPS=5
+N_REPS=2
 # Path to main RevBayes MCMC script
 REV_SCRIPT="scripts/Rev_scripts/mcmc.Rev"
 
