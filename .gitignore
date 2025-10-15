@@ -1,5 +1,6 @@
 # some directories to ignore
 /Plots
+/plots
 /Extra_Plots
 /extra_files
 /LaTeX
