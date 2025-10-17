@@ -16,7 +16,7 @@ library(Claddis, quietly = T)
 library(phytools, quietly = T)
 
 # Default alpha chosen to make the 95% gamma interval span one order of magnitude
-DEFAULT_ALPHA <- 1.1168
+DEFAULT_ALPHA <- 0.6490
 
 # Parse options
 option_list <- list(
