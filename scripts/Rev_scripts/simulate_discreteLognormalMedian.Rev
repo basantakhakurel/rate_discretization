@@ -21,7 +21,8 @@ print("Simulating morphological characters under the Mk+Lognormal model with " +
 
 Q_Mk := fnJC(2)
 
-sigma <- abs(ln(10) / (qnorm(0.975) - qnorm(0.025)))
+#sigma <- abs(ln(10) / (qnorm(0.975) - qnorm(0.025)))
+sigma <- 0.835
 
 mean := (-0.5*sigma*sigma)
 
