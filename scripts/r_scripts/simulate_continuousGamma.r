@@ -4,6 +4,11 @@
 # Author: Basanta Khakurel, Alessio Capobianco, and Sebastian Höhna
 # Date: 2025-06-27
 # Usage: Rscript scripts/r_scripts/Simulate_ContinuousGamma.R -n <number_of_simulation_replicates> -a <alpha>
+################################################################################
+# Orders of Magnitude:  1 | Gamma Alpha:  3.3582 | Lognormal Sigma:  0.5874
+# Orders of Magnitude:  2 | Gamma Alpha:  1.1168 | Lognormal Sigma:  1.1748
+# Orders of Magnitude:  3 | Gamma Alpha:  0.6490 | Lognormal Sigma:  1.7622
+################################################################################
 
 library(optparse, quietly = T)
 library(phangorn, quietly = T)
@@ -11,7 +16,7 @@ library(Claddis, quietly = T)
 library(phytools, quietly = T)
 
 # Default alpha chosen to make the 95% gamma interval span one order of magnitude
-DEFAULT_ALPHA <- 3.3582
+DEFAULT_ALPHA <- 1.1168
 
 # Parse options
 option_list <- list(

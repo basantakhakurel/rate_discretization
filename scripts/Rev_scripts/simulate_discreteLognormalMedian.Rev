@@ -3,6 +3,10 @@
 #   Discrete Lognormal ACRV
 #   Authors: Basanta Khakurel
 ################################################################################
+#Orders of Magnitude:  1 | Gamma Alpha:  3.3582 | Lognormal Sigma:  0.5874
+#Orders of Magnitude:  2 | Gamma Alpha:  1.1168 | Lognormal Sigma:  1.1748
+#Orders of Magnitude:  3 | Gamma Alpha:  0.6490 | Lognormal Sigma:  1.7622
+################################################################################
 
 NUM_REPS = args[1]
 NUM_CATEGORIES = args[2]
@@ -21,7 +25,8 @@ print("Simulating morphological characters under the Mk+Lognormal model with " +
 
 Q_Mk := fnJC(2)
 
-sigma <- abs(ln(10) / (qnorm(0.975) - qnorm(0.025)))
+#sigma <- abs(ln(10) / (qnorm(0.975) - qnorm(0.025)))
+sigma <- 1.1748
 
 mean := (-0.5*sigma*sigma)
 
