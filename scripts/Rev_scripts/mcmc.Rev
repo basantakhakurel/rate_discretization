@@ -58,7 +58,7 @@ monitors.append(mnScreen(printgen = 2000))
 
 # initialize MCMC
 mymcmc = mcmc(mymodel, monitors, moves, nruns = NUM_RUNS, combine = "mixed")
-mymcmc.run(generations = 80000, tuningInterval = 100)
+mymcmc.run(generations = 150000, tuningInterval = 100)
 mymcmc.operatorSummary()
 
 # summarizing the tree
