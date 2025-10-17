@@ -8,152 +8,116 @@ library(dplyr)
 library(purrr)
 library(extrafont)
 library(pilot)
+library(patchwork)
 
 set_pilot_family(family = "Montserrat")
 set.seed(33)
+alpha <- 3.3582
+k_values <- c(1, 3, 9)
 
-# Parameters
-alpha <- 3
-k_values <- c(1, 2, 3, 5, 7, 11, 15, 23)
-
-# Discretization functions
-
-# Mean of each bin
-discrete.gamma.mean <- function(alpha, k) {
-  if (k == 1) {
-    return(1)
-  }
-  quants <- qgamma((1:(k - 1)) / k, shape = alpha, rate = alpha)
-  rates <- diff(c(0, pgamma(quants * alpha, shape = alpha + 1), 1)) * k
-  return(rates)
+# generate data for mean
+make_mean_data <- function(k_values, alpha) {
+  map_dfr(k_values, ~ {
+    quants <- qgamma((1:(.x - 1)) / .x, shape = alpha, rate = alpha)
+    rates <- if (.x == 1) 1 else diff(c(0, pgamma(quants * alpha, shape = alpha + 1), 1)) * .x
+    tibble(center = rates, k = .x)
+  }) %>%
+    mutate(density = dgamma(center, shape = alpha, rate = alpha))
 }
 
-# Median of each bin
-discrete.gamma.median <- function(alpha, k) {
-  midpoints <- (0:(k - 1)) / k + 1 / (2 * k)
-  rates <- qgamma(midpoints, shape = alpha, rate = alpha)
-  return(rates / mean(rates)) # normalized so mean = 1
-}
-
-# Generate all data
-make_data <- function(method, k_values, alpha) {
-  map_dfr(
-    k_values,
-    ~ {
-      rates <- if (method == "mean") {
-        discrete.gamma.mean(alpha, .x)
-      } else {
-        discrete.gamma.median(alpha, .x)
-      }
-      tibble(
-        center = rates,
-        k = .x,
-        density = dgamma(rates, shape = alpha, rate = alpha)
-      )
+# generate data for median with status (shared/unique)
+make_median_data_with_status <- function(method, k_values, alpha) {
+  get_prior_midpoints <- function(current_k, all_ks) {
+    smaller_ks <- all_ks[all_ks < current_k]
+    if (length(smaller_ks) == 0) {
+      return(numeric(0))
     }
-  )
+    unlist(map(smaller_ks, ~ (0:(. - 1)) / . + 1 / (2 * .)))
+  }
+
+  map_dfr(k_values, ~ {
+    current_k <- .x
+    midpoints <- (0:(current_k - 1)) / current_k + 1 / (2 * current_k)
+    prior_midpoints <- get_prior_midpoints(current_k, k_values)
+
+    status <- if (current_k == 1) {
+      rep("Shared", length(midpoints))
+    } else {
+      if_else(round(midpoints, 6) %in% round(prior_midpoints, 6), "Shared", "Unique")
+    }
+
+    rates <- qgamma(midpoints, shape = alpha, rate = alpha)
+
+    if (method == "normalized") {
+      rates <- rates / mean(rates)
+    }
+
+    tibble(
+      center = rates,
+      k = current_k,
+      density = dgamma(rates, shape = alpha, rate = alpha),
+      status = factor(status, levels = c("Shared", "Unique"))
+    )
+  })
 }
 
-all_discretizations_mean <- make_data("mean", k_values, alpha)
-all_discretizations_median <- make_data("median", k_values, alpha)
+# Generate data for all plots
+all_discretizations_mean <- make_mean_data(k_values, alpha)
+all_discretizations_median <- make_median_data_with_status("normalized", k_values, alpha)
+all_discretizations_median_unnormalized <- make_median_data_with_status("unnormalized", k_values, alpha)
 
-# plotting function
-make_faceted_plot <- function(data, title) {
+# plotting function for median
+make_faceted_plot_median <- function(data, title) {
   ggplot(data) +
-    # gamma curve
-    stat_function(
-      fun = dgamma,
-      args = list(shape = alpha, rate = alpha),
-      linewidth = 1,
-      color = "#2c3e50",
-      alpha = 0.8
+    stat_function(fun = dgamma, args = list(shape = alpha, rate = alpha), linewidth = 1, color = "#2c3e50") +
+    geom_segment(aes(x = center, xend = center, y = density, yend = 0, linetype = status), color = "#e74c3c", linewidth = 1) +
+    geom_point(aes(x = center, y = density), color = "#8e44ad", size = 2.0) +
+    facet_wrap(~k, ncol = 1, labeller = labeller(k = function(x) paste0("k = ", x))) +
+    scale_linetype_manual(
+      name = "Rate Type",
+      values = c("Shared" = "solid", "Unique" = "dotted")
     ) +
-    # vertical droplines
-    geom_segment(
-      aes(x = center, xend = center, y = density, yend = 0),
-      color = "#e74c3c",
-      linewidth = 1,
-      alpha = 0.85
-    ) +
-    geom_point(
-      aes(x = center, y = density),
-      color = "#8e44ad",
-      size = 1.5,
-      alpha = 0.9
-    ) +
-    facet_wrap(~k,
-      ncol = 2, scales = "fixed",
-      labeller = labeller(k = function(x) paste0("k = ", x))
-    ) +
-    scale_x_continuous(limits = c(0, 3), expand = c(0.02, 0)) +
+    scale_x_continuous(limits = c(0, 3.5), expand = c(0.02, 0)) +
     scale_y_continuous(limits = c(0, NA), expand = c(0.02, 0)) +
-    labs(
-      title = title,
-      x = "rate",
-      y = "probability"
-    ) +
-    theme_pilot(
-      title_size = 22,
-      facet_title_size = 20,
-      axis_title_size = 20,
-      axis_text_size = 18
-    ) +
+    labs(title = title, x = "rate", y = "probability") +
+    theme_pilot(title_size = 22, facet_title_size = 20, axis_title_size = 20, axis_text_size = 18) +
     theme(
-      plot.title = element_text(hjust = 0.5),
-      axis.text.y = element_blank(),
-      axis.ticks.y = element_blank(),
-      strip.text = element_text(face = "plain")
+      plot.title = element_text(hjust = 0.5, face = "plain"),
+      axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+      strip.text = element_text(face = "bold"), legend.position = "none",
+      legend.text = element_text(size = 16), legend.title = element_text(size = 16, face = "bold")
     )
 }
 
-# Generate all plots
-faceted_plot_mean <- make_faceted_plot(
-  all_discretizations_mean,
-  "Mean discretization"
-)
+# plotting function for mean
+make_faceted_plot_mean <- function(data, title) {
+  ggplot(data) +
+    stat_function(fun = dgamma, args = list(shape = alpha, rate = alpha), linewidth = 1, color = "#2c3e50") +
+    geom_segment(aes(x = center, xend = center, y = density, yend = 0), color = "#e74c3c", linewidth = 1, linetype = "twodash") +
+    geom_point(aes(x = center, y = density), color = "#8e44ad", size = 2.0) +
+    facet_wrap(~k, ncol = 1, labeller = labeller(k = function(x) paste0("k = ", x))) +
+    scale_x_continuous(limits = c(0, 3.5), expand = c(0.02, 0)) +
+    scale_y_continuous(limits = c(0, NA), expand = c(0.02, 0)) +
+    labs(title = title, x = "rate", y = "probability") +
+    theme_pilot(title_size = 22, facet_title_size = 20, axis_title_size = 20, axis_text_size = 18) +
+    theme(
+      plot.title = element_text(hjust = 0.5, face = "plain"),
+      axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+      strip.text = element_text(face = "bold"),
+      legend.position = "none"
+    )
+}
 
-faceted_plot_median <- make_faceted_plot(
-  all_discretizations_median,
-  "Median discretization"
-)
+faceted_plot_mean <- make_faceted_plot_mean(all_discretizations_mean, "Mean")
+faceted_plot_median <- make_faceted_plot_median(all_discretizations_median, "Normalized Median")
+faceted_plot_median_unnormalized <- make_faceted_plot_median(all_discretizations_median_unnormalized, "Unnormalized Median")
 
+mean_plot_labeled <- faceted_plot_mean + labs(tag = "A") + theme(plot.tag = element_text(size = 20, face = "bold", hjust = -0.5, vjust = 1))
+median_plot_labeled <- faceted_plot_median + labs(tag = "B") + theme(plot.tag = element_text(size = 20, face = "bold", hjust = -0.5, vjust = 1))
+unnormalized_plot_labeled <- faceted_plot_median_unnormalized + labs(tag = "C") + theme(plot.tag = element_text(size = 20, face = "bold", hjust = -0.5, vjust = 1))
 
-# mean_plot_labeled <- faceted_plot_mean +
-#   labs(tag = "a)") +
-#   theme(plot.tag = element_text(size = 20, face = "bold", hjust = 0, vjust = 0, family = "Montserrat"))
+final_plot <- mean_plot_labeled | median_plot_labeled | unnormalized_plot_labeled
 
-# median_plot_labeled <- faceted_plot_median +
-#   labs(tag = "b)") +
-#   theme(plot.tag = element_text(size = 20, face = "bold", hjust = 0, vjust = 0, family = "Montserrat"))
-
-
-# Mean version
-ggsave("Plots/gamma_mean.pdf", mean_plot_labeled,
-  device = cairo_pdf, width = 12, height = 10, dpi = 450, bg = "white"
-)
-ggsave("Plots/gamma_mean.png", mean_plot_labeled,
-  width = 16, height = 13, dpi = 450, bg = "white"
-)
-
-# Median version
-ggsave("Plots/gamma_median.pdf", median_plot_labeled,
-  device = cairo_pdf, width = 12, height = 10, dpi = 450, bg = "white"
-)
-ggsave("Plots/gamma_median.png", median_plot_labeled,
-  width = 16, height = 13, dpi = 450, bg = "white"
-)
-
-print("Plots saved successfully!")
-
-
-library(patchwork)
-
-final_plot <- mean_plot_labeled + median_plot_labeled +
-  plot_annotation(
-    tag_levels = "A",
-    theme = theme(plot.title = element_text(size = 24, face = "bold", family = "Montserrat"))
-  )
-
-ggsave("Plots/gamma_discretization.pdf", final_plot,
-  device = cairo_pdf, width = 20, height = 8, dpi = 450, bg = "white"
+ggsave("IntroPlots/gamma_discretization_final.pdf", final_plot,
+  device = cairo_pdf, width = 20, height = 9, dpi = 450, bg = "white", create.dir = T
 )

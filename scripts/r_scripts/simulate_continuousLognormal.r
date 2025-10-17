@@ -11,8 +11,8 @@ library(Claddis, quietly = T)
 library(phytools, quietly = T)
 
 # Default sigma chosen to make the 95% lognormal interval span one order of magnitude
-DEFAULT_SIGMA <- abs(log(10) / (qnorm(0.975) - qnorm(0.025)))
-
+# DEFAULT_SIGMA <- abs(log(10) / (qnorm(0.975) - qnorm(0.025)))
+DEFAULT_SIGMA <- 0.835
 # Parse options
 option_list <- list(
   make_option(c("-n", "--n_reps"),

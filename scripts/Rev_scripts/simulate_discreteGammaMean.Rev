@@ -21,7 +21,8 @@ print("Simulating morphological characters under the Mk+GammaMean model with " +
 
 Q_Mk := fnJC(2)
 
-alpha <- 3.3582
+#alpha <- 3.3582
+alpha <- 0.835
 
 rates_morpho := fnDiscretizeGamma(alpha, alpha, NUM_CATEGORIES, median = false)
 
