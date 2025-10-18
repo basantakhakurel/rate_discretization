@@ -20,7 +20,10 @@ set_pilot_family(family = "Montserrat")
 # Configuration of plots and simulation settings
 CONFIG <- list(
   # True values
-  true_sigma = 0.587405,
+  # true_sigma = 0.587405, # one order of magnitude
+  # true_sigma = 1.1748, # two orders of magnitude
+  true_sigma = 1.7622, # three orders of magnitude
+  # true_sigma = 0.835, # equivalent variation
   true_tree_length = 1.02696,
 
   # Burn-in
@@ -43,7 +46,7 @@ CONFIG <- list(
 # function to load and parse output with Gamma
 # this function takes all the data from the log files
 # and removes the burnin as well.
-load_and_parse_data <- function(base_dir = "inference_results", rep_num = 1) {
+load_and_parse_data <- function(base_dir = "cluster_output/three_orders_magnitude/inference_results", rep_num = 1) {
   cat("Scanning for result directories for sim_", rep_num, "...\n", sep = "")
   all_dirs <- list.dirs(path = base_dir, recursive = TRUE)
   rep_string <- paste0("/sim_", rep_num)
@@ -125,7 +128,7 @@ create_sigma_panel <- function(data, true_value, x_var, x_lab, plot_title) {
       aes(fill = inf_k)
     ) +
     geom_vline(xintercept = true_value, linetype = "dashed", color = "#e74c3c", linewidth = 0.8) +
-    scale_x_continuous(limits = c(0.3, 0.9), breaks = seq(0.2, 1, 0.2)) +
+    # scale_x_continuous(limits = c(0.9, 1.8), breaks = seq(0.9, 1.8, 0.2)) +
     facet_wrap(~sim_k, nrow = 1, labeller = labeller(sim_k = function(x) paste("k =", x))) +
     scale_fill_viridis_d() +
     labs(x = x_lab, y = "Rate Categories", title = plot_title) +
@@ -153,8 +156,7 @@ create_tl_panel <- function(data, true_value, x_var, x_lab, plot_title) {
       aes(fill = inf_k)
     ) +
     geom_vline(xintercept = true_value, linetype = "dashed", color = "#8e44ad", linewidth = 0.8) +
-    scale_x_continuous(limits = c(0.9, 1.4), breaks = seq(0.9, 1.4, 0.2)) +
-    # scale_x_continuous(limits = c(0.8, 1.5)) +
+    # scale_x_continuous(limits = c(0.8, 1.2), breaks = seq(0.8, 1.2, 0.2)) +
     facet_wrap(~sim_k, nrow = 1, labeller = labeller(sim_k = function(x) paste("k =", x))) +
     scale_fill_viridis_d() +
     labs(x = x_lab, y = "Rate Categories", title = plot_title) +
