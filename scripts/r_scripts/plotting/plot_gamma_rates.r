@@ -12,7 +12,9 @@ library(patchwork)
 
 set_pilot_family(family = "Montserrat")
 set.seed(33)
-alpha <- 3.3582
+# alpha <- 3.3582
+# alpha <- 1.1168
+alpha <- 2.5
 k_values <- c(1, 3, 9)
 
 # generate data for mean
@@ -118,6 +120,6 @@ unnormalized_plot_labeled <- faceted_plot_median_unnormalized + labs(tag = "C") 
 
 final_plot <- mean_plot_labeled | median_plot_labeled | unnormalized_plot_labeled
 
-ggsave("IntroPlots/gamma_discretization_final.pdf", final_plot,
+ggsave("IntroPlots/gamma_discretization_alpha2.5.pdf", final_plot,
   device = cairo_pdf, width = 20, height = 9, dpi = 450, bg = "white", create.dir = T
 )
