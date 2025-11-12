@@ -25,6 +25,7 @@ slurm_*
 *.log
 *.tre
 *.trees
+cluster_output/
 
 # RevBayes and R history files
 history.txt
