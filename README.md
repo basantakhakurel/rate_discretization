@@ -174,7 +174,7 @@ If you use this data or code, please cite:
 ## Contact
 
 For questions about this dataset or code, please contact:
-- Basanta Khakurel: [basantakhakurel@gmail.com]
+- Basanta Khakurel: [basantakhakurel<@>gmail.com]
 
 ## Additional Notes
 
