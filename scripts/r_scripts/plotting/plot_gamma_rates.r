@@ -81,11 +81,12 @@ make_faceted_plot_median <- function(data, title) {
     ) +
     scale_x_continuous(limits = c(0, 3.5), expand = c(0.02, 0)) +
     scale_y_continuous(limits = c(0, NA), expand = c(0.02, 0)) +
-    labs(title = title, x = "rate", y = "probability") +
+    labs(title = title, x = "rate", y = "") +
     theme_pilot(title_size = 22, facet_title_size = 20, axis_title_size = 20, axis_text_size = 18) +
     theme(
       plot.title = element_text(hjust = 0.5, face = "plain"),
       axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+      axis.title.y = element_blank(),
       strip.text = element_text(face = "bold"), legend.position = "none",
       legend.text = element_text(size = 16), legend.title = element_text(size = 16, face = "bold")
     )
@@ -120,6 +121,6 @@ unnormalized_plot_labeled <- faceted_plot_median_unnormalized + labs(tag = "C") 
 
 final_plot <- mean_plot_labeled | median_plot_labeled | unnormalized_plot_labeled
 
-ggsave("IntroPlots/gamma_discretization_alpha2.5.pdf", final_plot,
-  device = cairo_pdf, width = 20, height = 9, dpi = 450, bg = "white", create.dir = T
+ggsave(paste0("IntroPlots/gamma_discretization_alpha", alpha, ".pdf"), final_plot,
+  device = cairo_pdf, width = 15, height = 7, dpi = 450, bg = "white", create.dir = T
 )
