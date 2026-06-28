@@ -1,0 +1,63 @@
+################################################################################
+# RevBayes Script -- simulating morphological sequences with the Mk model and ACRV (Using Discrete Gamma (Mean/Median) or Lognormal Distributions)
+#   Authors: Basanta Khakurel
+################################################################################
+
+if (args.size() < 9) {
+  stop("simulateACRV.Rev expects 9 arguments: TREE_FILE NUM_REPS NUM_SITES N_STATES RATE_MODEL NUM_CATEGORIES ALPHA SIGMA OUTPUT_DIR")
+}
+
+# obtain arguments
+# even though it accepts both ALPHA and SIGMA
+# it's usage is determined by RATE_MODEL
+TREE_FILE = args[1]
+NUM_REPS = args[2]
+NUM_SITES = args[3]
+N_STATES = args[4]
+RATE_MODEL = args[5]
+NUM_CATEGORIES = args[6]
+ALPHA = args[7]
+SIGMA = args[8]
+OUTPUT_DIR = args[9]
+
+# load the starting tree
+starting_tree <- readBranchLengthTrees(TREE_FILE)[1]
+
+# set up the Mk model rate matrix
+Q := fnJC(N_STATES)
+
+# set up ACRV
+if (RATE_MODEL == "discreteGammaMean") {
+  print("Using discrete gamma with mean discretization.")
+  rates_morpho := fnDiscretizeGamma(ALPHA, ALPHA, NUM_CATEGORIES, median = false)
+} else if (RATE_MODEL == "discreteGammaMedian") {
+  print("Using discrete gamma with median discretization.")
+  rates_morpho := fnDiscretizeGamma(ALPHA, ALPHA, NUM_CATEGORIES, median = true)
+} else if (RATE_MODEL == "discreteLognormalMedian") {
+  print("Using discrete lognormal with median discretization.")
+  mean := (-0.5 * SIGMA * SIGMA)
+  rates_morpho := normalize(fnDiscretizeDistribution(dnLognormal(mean, SIGMA), NUM_CATEGORIES))
+} else {
+  stop("Unknown rate model: " + RATE_MODEL)
+}
+
+# simulate sequences
+seq_mk_acrv ~ dnPhyloCTMC(
+  tree = starting_tree,
+  Q = Q,
+  siteRates = rates_morpho,
+  type = "Standard",
+  nSites = NUM_SITES
+)
+
+# loop over number of replicates
+for (i in 1:NUM_REPS) {
+  seq_mk_acrv.redraw()
+  writeNexus(file = OUTPUT_DIR + "/sim_" + i + ".nex", seq_mk_acrv)
+}
+
+# print out message in the terminal
+print("Simulation complete. Output directory: " + OUTPUT_DIR)
+
+# Quit RevBayes
+q()

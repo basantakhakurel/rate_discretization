@@ -1,0 +1,38 @@
+################################################################################
+#  RevBayes script: Simulating a tree given the expected tree length
+#  Authors: Basanta Khakurel
+################################################################################
+N_TAXA = args[1]
+EXPECTED_TL = args[2]
+OUTPUT_TREE = args[3]
+
+if (args.size() > 3) {
+  TREE_SEED = args[4]
+  seed(TREE_SEED)
+}
+
+# the simulated tree is only for taxon names
+# get the names of the taxa
+taxa <- simTree(N_TAXA).taxa()
+
+# to obtain the branch lengths
+# to obtain the number of branches for an unrooted tree
+n_taxa <- taxa.size()
+n_branches <- 2 * n_taxa - 3
+
+# solving for lambda using the expected tree length
+lambda <- n_branches / EXPECTED_TL
+
+# crete the tree with branch lengths
+starting_tree ~ dnUniformTopologyBranchLength(
+  taxa,
+  branchLengthDistribution = dnExponential(lambda)
+)
+
+# print some useful information in the screen
+print("Tree length: " + starting_tree.treeLength())
+print("Writing tree to: " + OUTPUT_TREE)
+write(filename = OUTPUT_TREE, starting_tree)
+
+# Quit RevBayes
+q()

@@ -1,0 +1,101 @@
+################################################################################
+# RevBayes script: Main MCMC script
+# Authors: Basanta Khakurel, Alessio Capobianco, and Sebastian Höhna
+# Date: 2025-09-02
+# Last Modified: 2026-06-28
+################################################################################
+# Arguments:
+#   1: DATASET_LABEL - label for output files
+#   2: DATASET_FILE - path to NEXUS data file
+#   3: MODEL - inference model (discreteGammaMean, discreteGammaMedian, discreteLognormalMedian)
+#   4: OUTPUT_DIR - output directory for results
+#   5: NUM_RUNS - number of MCMC runs (default: 2)
+#   6: NUM_CATEGORIES - number of rate categories (default: 2)
+#   7: MODELS_DIR - directory containing model Rev files (default: rev/models)
+################################################################################
+
+DATASET_LABEL = args[1]
+DATASET_FILE = args[2]
+MODEL = args[3]
+OUTPUT_DIR = args[4]
+
+# number of MCMC chains to run
+if (args.size() > 4) {
+  NUM_RUNS = args[5]
+} else {
+  NUM_RUNS = 2
+}
+
+# number of rate categories
+if (args.size() > 5) {
+  NUM_CATEGORIES = args[6]
+} else {
+  NUM_CATEGORIES = 2
+}
+
+if (args.size() > 6) {
+  MODELS_DIR = args[7]
+} else {
+  MODELS_DIR = "rev/models"
+}
+
+print("MCMC Inference")
+print("Dataset: " + DATASET_FILE)
+print("Model: " + MODEL)
+print("Categories: " + NUM_CATEGORIES)
+print("Output: " + OUTPUT_DIR)
+print("Models directory: " + MODELS_DIR)
+print("====================================")
+
+# read in the data matrix
+data <- readDiscreteCharacterData(DATASET_FILE)
+
+# helpers
+taxa <- data.names()
+n_taxa <- taxa.size()
+n_branches <- 2 * n_taxa - 3
+
+print("Loaded data with " + n_taxa + " taxa")
+
+# vectors for moves and monitors
+moves = VectorMoves()
+monitors = VectorMonitors()
+
+# tree model
+source(MODELS_DIR + "/model_UniformTree.Rev")
+
+# substitution model with ACRV
+source(MODELS_DIR + "/model_" + MODEL + ".Rev")
+
+# MCMC
+mymodel = model(phylogeny)
+
+# Monitors
+# for the full model
+monitors.append(mnModel(filename = OUTPUT_DIR + "/" + DATASET_LABEL + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.log", printgen = 100))
+# for trees
+monitors.append(mnFile(filename = OUTPUT_DIR + "/" + DATASET_LABEL + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.trees", printgen = 100, phylogeny))
+# for the screen
+monitors.append(mnScreen(printgen = 2000))
+
+# Run MCMC
+mymcmc = mcmc(mymodel, monitors, moves, nruns = NUM_RUNS, combine = "mixed")
+# first run 25% mcmc chain length of burnin with tuning
+mymcmc.burnin(generations = 0.25 * 150000, tuningInterval = 100)
+# then run the mcmc
+mymcmc.run(generations = 150000)
+mymcmc.operatorSummary()
+
+# summarizing the tree
+print("Computing summary trees...")
+# read in the trees
+trace = readTreeTrace(OUTPUT_DIR + "/" + DATASET_LABEL + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.trees", treetype = "non-clock", nruns = NUM_RUNS, burnin = 0.25)
+# maximum `a posteriori` tree
+mapTree(trace, file = OUTPUT_DIR + "/" + DATASET_LABEL + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.map.tre")
+# maximum clade credibility tree
+mccTree(trace, file = OUTPUT_DIR + "/" + DATASET_LABEL + "_" + MODEL + "_" + NUM_CATEGORIES + "_Cats.mcc.tre")
+
+print("MCMC Complete")
+
+# exit RevBayes
+quit()
