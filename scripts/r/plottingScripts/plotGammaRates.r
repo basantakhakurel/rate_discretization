@@ -10,10 +10,8 @@ library(extrafont)
 library(pilot)
 library(patchwork)
 
-set_pilot_family(family = "Montserrat")
+set_pilot_family(family = "Fira Sans")
 set.seed(33)
-# alpha <- 3.3582
-# alpha <- 1.1168
 alpha <- 2.5
 k_values <- c(1, 3, 9)
 
@@ -23,7 +21,7 @@ make_mean_data <- function(k_values, alpha) {
     quants <- qgamma((1:(.x - 1)) / .x, shape = alpha, rate = alpha)
     rates <- if (.x == 1) 1 else diff(c(0, pgamma(quants * alpha, shape = alpha + 1), 1)) * .x
     tibble(center = rates, k = .x)
-  }) %>%
+  }) |>
     mutate(density = dgamma(center, shape = alpha, rate = alpha))
 }
 
@@ -121,6 +119,6 @@ unnormalized_plot_labeled <- faceted_plot_median_unnormalized + labs(tag = "C") 
 
 final_plot <- mean_plot_labeled | median_plot_labeled | unnormalized_plot_labeled
 
-ggsave(paste0("IntroPlots/gamma_discretization_alpha", alpha, ".pdf"), final_plot,
-  device = cairo_pdf, width = 15, height = 7, dpi = 450, bg = "white", create.dir = T
+ggsave(paste0("plots/GammaRates", alpha, ".pdf"), final_plot,
+  device = cairo_pdf, width = 15, height = 7, dpi = 450, bg = "white", create.dir = TRUE
 )

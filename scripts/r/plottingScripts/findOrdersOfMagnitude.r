@@ -49,7 +49,7 @@ for (i in seq_along(orders_of_magnitude)) {
 cat(paste(rep("=", 60), collapse = ""), "\n")
 
 # Create plot (comment this if plot is not wanted)
-cairo_pdf("plots/order_of_magnitude_parameters.pdf", width = 10, height = 5, family = "Fira Sans")
+cairo_pdf("plots/OrderOfMagnitudeParameters.pdf", width = 10, height = 5, family = "Fira Sans")
 par(mfrow = c(1, 2), mar = c(5, 5, 4, 2))
 
 # Plot Gamma
@@ -57,7 +57,7 @@ plot(orders_of_magnitude, gamma_shapes,
   type = "b", pch = 19, col = "blue", lwd = 2,
   xlab = "Orders of Magnitude", ylab = expression("Shape Parameter (" * alpha * ")"),
   main = "Gamma Distribution",
-  cex.main = 1, cex.lab = 1.1, cex.axis = 1
+  cex.main = 1.5, cex.lab = 1.2, cex.axis = 1.1
 )
 grid(col = "gray", lty = "dotted")
 
@@ -66,7 +66,7 @@ plot(orders_of_magnitude, lognormal_sigmas,
   type = "b", pch = 19, col = "red", lwd = 2,
   xlab = "Orders of Magnitude", ylab = expression("Shape Parameter (" * sigma * ")"),
   main = "Lognormal Distribution",
-  cex.main = 1, cex.lab = 1.1, cex.axis = 1
+  cex.main = 1.5, cex.lab = 1.2, cex.axis = 1.1
 )
 grid(col = "gray", lty = "dotted")
 
