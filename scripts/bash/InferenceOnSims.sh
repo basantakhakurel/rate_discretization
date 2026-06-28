@@ -160,8 +160,9 @@ module load prebin/kry
 
 export R_LIBS_USER=\$HOME/R_libs
 
+LINE_NUM=\$(( \${OFFSET:-0} + SLURM_ARRAY_TASK_ID ))
 read -r scenario_id rep inf_model inf_k n_states dataset_file \\
-    <<< "\$(sed -n "\${SLURM_ARRAY_TASK_ID}p" "${PARAMS_FILE}")"
+    <<< "\$(sed -n "\${LINE_NUM}p" "${PARAMS_FILE}")"
 
 printf '%s  Scenario: %s  rep: %s  model: %s  k: %s  states: %s\n' \\
     "\$(date '+%F %T')" "\$scenario_id" "\$rep" "\$inf_model" "\$inf_k" "\$n_states"
@@ -178,14 +179,36 @@ EOF
 
     chmod +x "$SLURM_SCRIPT"
 
+    MAX_ARRAY=10000
+    N_BATCHES=$(( (NUM_JOBS + MAX_ARRAY - 1) / MAX_ARRAY ))
+
     if [[ "$DRY_RUN" == "true" ]]; then
-        printf '%s  [DRY RUN] Would submit: sbatch --array=1-%d%%200 -p krypton %s\n' \
-            "$(date '+%F %T')" "$NUM_JOBS" "$SLURM_SCRIPT"
+        printf '%s  [DRY RUN] %d jobs → %d batch(es) (MaxArraySize=%d):\n' \
+            "$(date '+%F %T')" "$NUM_JOBS" "$N_BATCHES" "$MAX_ARRAY"
+        for (( batch=0; batch<N_BATCHES; batch++ )); do
+            start=$(( batch * MAX_ARRAY + 1 ))
+            end=$(( (batch + 1) * MAX_ARRAY ))
+            [[ $end -gt $NUM_JOBS ]] && end=$NUM_JOBS
+            batch_size=$(( end - start + 1 ))
+            offset=$(( start - 1 ))
+            printf '  Batch %d: sbatch --array=1-%d%%400 --export=ALL,OFFSET=%d -p krypton %s\n' \
+                "$((batch+1))" "$batch_size" "$offset" "$SLURM_SCRIPT"
+        done
         printf '%s  Preview (first 10 jobs):\n' "$(date '+%F %T')"
         head -10 "$PARAMS_FILE" | nl
     else
-        sbatch --array="1-${NUM_JOBS}%200" -p krypton "$SLURM_SCRIPT"
-        printf '%s  Jobs submitted (200 running at once)! Check logs in %s\n' "$(date '+%F %T')" "$SLURM_LOGS"
+        for (( batch=0; batch<N_BATCHES; batch++ )); do
+            start=$(( batch * MAX_ARRAY + 1 ))
+            end=$(( (batch + 1) * MAX_ARRAY ))
+            [[ $end -gt $NUM_JOBS ]] && end=$NUM_JOBS
+            batch_size=$(( end - start + 1 ))
+            offset=$(( start - 1 ))
+            sbatch --array="1-${batch_size}%400" --export=ALL,OFFSET="${offset}" -p krypton "$SLURM_SCRIPT"
+            printf '%s  Submitted batch %d/%d (jobs %d–%d).\n' \
+                "$(date '+%F %T')" "$((batch+1))" "$N_BATCHES" "$start" "$end"
+        done
+        printf '%s  All %d batches submitted (max 400 running at once). Logs: %s\n' \
+            "$(date '+%F %T')" "$N_BATCHES" "$SLURM_LOGS"
     fi
 
 # local run sequentially
