@@ -13,13 +13,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 SCENARIOS_FILE="${REPO_ROOT}/simConfigs.tsv"
-OUTPUT_ROOT="${REPO_ROOT}/output"
+OUTPUT_ROOT="${REPO_ROOT}/SimData"
 INFERENCE_ROOT="${REPO_ROOT}/inference_output"
 
 INF_CATEGORIES=(2 4 8 16 100)
 
 echo "=============================================="
-echo "Pipeline v2 Status Check"
+echo "Pipeline Status Check"
 echo "=============================================="
 echo ""
 
