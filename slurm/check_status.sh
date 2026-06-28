@@ -14,7 +14,7 @@ REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 SCENARIOS_FILE="${REPO_ROOT}/simConfigs.tsv"
 OUTPUT_ROOT="${REPO_ROOT}/SimData"
-INFERENCE_ROOT="${REPO_ROOT}/inference_output"
+INFERENCE_ROOT="${REPO_ROOT}/InferenceOutput"
 
 INF_CATEGORIES=(2 4 8 16 100)
 
