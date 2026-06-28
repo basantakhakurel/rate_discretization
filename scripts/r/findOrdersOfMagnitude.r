@@ -49,7 +49,7 @@ for (i in seq_along(orders_of_magnitude)) {
 cat(paste(rep("=", 60), collapse = ""), "\n")
 
 # Create plot (comment this if plot is not wanted)
-cairo_pdf("figures/order_of_magnitude_parameters.pdf", width = 10, height = 5)
+cairo_pdf("plots/order_of_magnitude_parameters.pdf", width = 10, height = 5, family = "Fira Sans")
 par(mfrow = c(1, 2), mar = c(5, 5, 4, 2))
 
 # Plot Gamma
