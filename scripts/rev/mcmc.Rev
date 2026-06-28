@@ -12,6 +12,7 @@
 #   5: NUM_RUNS - number of MCMC runs (default: 2)
 #   6: NUM_CATEGORIES - number of rate categories (default: 2)
 #   7: MODELS_DIR - directory containing model Rev files (default: rev/models)
+#   8: NUM_STATES - number of character states for the Mk model (default: 2)
 ################################################################################
 
 DATASET_LABEL = args[1]
@@ -39,10 +40,17 @@ if (args.size() > 6) {
   MODELS_DIR = "rev/models"
 }
 
+if (args.size() > 7) {
+  NUM_STATES = args[8]
+} else {
+  NUM_STATES = 2
+}
+
 print("MCMC Inference")
 print("Dataset: " + DATASET_FILE)
 print("Model: " + MODEL)
 print("Categories: " + NUM_CATEGORIES)
+print("States: " + NUM_STATES)
 print("Output: " + OUTPUT_DIR)
 print("Models directory: " + MODELS_DIR)
 print("====================================")

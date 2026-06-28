@@ -1,0 +1,17 @@
+# RevBayes Script -- uniform tree topology
+# Authors -- Basanta Khakurel and Sebastian Höhna
+
+# set the branchlength prior using expected tree length
+lambda <- n_branches / 1
+
+# define tree parameter
+# we assume a uniform prior on the tree topology
+phylogeny ~ dnUniformTopologyBranchLength(taxa, branchLengthDistribution = dnExponential(lambda))
+
+# compute the tree length from the phylogeny
+tree_length := phylogeny.treeLength()
+
+# moves for the tree
+moves.append(mvNNI(phylogeny, weight = n_branches))
+moves.append(mvSPR(phylogeny, weight = n_branches / 5.0))
+moves.append(mvBranchLengthScale(phylogeny, weight = n_branches))
