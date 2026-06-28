@@ -1,8 +1,8 @@
-# some directories to ignore
+# some directories and files to ignore
 /Plots
 /plots
 /Extra_Plots
-/extra_files
+/archive
 /LaTeX
 /Simulated
 /output
@@ -11,22 +11,34 @@
 **/sim_*/**
 /Junk_Output
 slurm_*
-
-# mac identifier file
-.DS_Store
-
+test*
+output/
+Notes*
+logs/
 # plots
 *.pdf
 *.png
-
 # output files
+*.nex
+*.iqtree
+*.ckp.gz
+*.mldist
+*.bionj
+*.treefile
+*.nwk
+*.phy
 *.out
 *.err
 *.log
 *.tre
 *.trees
 cluster_output/
-
 # RevBayes and R history files
 history.txt
 .Rhistory
+
+# mac identifier file
+.DS_Store
+
+
+
