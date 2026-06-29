@@ -100,7 +100,7 @@ else
 fi
 
 if [[ -d "${INFERENCE_ROOT}" ]]; then
-  inf_completed=$(find "${INFERENCE_ROOT}" -name "*.log" 2>/dev/null | wc -l)
+  inf_completed=$(find "${INFERENCE_ROOT}" -name "*.map.tre" 2>/dev/null | wc -l)
   echo "Inference runs completed: ${inf_completed} / ${total_inference_jobs}"
 else
   echo "Inference runs completed: 0 / ${total_inference_jobs}"

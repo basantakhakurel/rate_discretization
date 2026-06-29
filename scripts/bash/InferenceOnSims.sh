@@ -149,7 +149,7 @@ if [[ "$COMPUTE_RESOURCE" == "palmuc" ]]; then
 #SBATCH --nodes=1
 #SBATCH --ntasks=2
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=16G
+#SBATCH --mem=8G
 #SBATCH --qos=normal_prio
 
 module purge
