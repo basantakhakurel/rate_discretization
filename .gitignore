@@ -15,6 +15,10 @@ test*
 output/
 Notes*
 logs/
+SimData/*
+slurm/params/
+slurm/scripts/
+Analyses/*
 # plots
 *.pdf
 *.png
