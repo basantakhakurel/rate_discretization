@@ -16,108 +16,108 @@
 # 8 TAXA - 1 ORDER OF MAGNITUDE (Low heterogeneity)
 #######################################################################################################
 # Continuous models
-8taxa_1order_continuousGamma	8	1.0	100000	2	continuousGamma	0	3.358	0.587	25
-8taxa_1order_continuousLognormal	8	1.0	100000	2	continuousLognormal	0	3.358	0.587	25
+8taxa_1order_continuousGamma	8	1.0	10000	2	continuousGamma	0	3.358	0.587	25
+8taxa_1order_continuousLognormal	8	1.0	10000	2	continuousLognormal	0	3.358	0.587	25
 # Discrete Gamma Mean
-8taxa_1order_gammaMean_k2	8	1.0	100000	2	discreteGammaMean	2	3.358	0.587	25
-8taxa_1order_gammaMean_k4	8	1.0	100000	2	discreteGammaMean	4	3.358	0.587	25
-8taxa_1order_gammaMean_k8	8	1.0	100000	2	discreteGammaMean	8	3.358	0.587	25
+8taxa_1order_gammaMean_k2	8	1.0	10000	2	discreteGammaMean	2	3.358	0.587	25
+8taxa_1order_gammaMean_k4	8	1.0	10000	2	discreteGammaMean	4	3.358	0.587	25
+8taxa_1order_gammaMean_k8	8	1.0	10000	2	discreteGammaMean	8	3.358	0.587	25
 # Discrete Gamma Median
-8taxa_1order_gammaMedian_k2	8	1.0	100000	2	discreteGammaMedian	2	3.358	0.587	25
-8taxa_1order_gammaMedian_k4	8	1.0	100000	2	discreteGammaMedian	4	3.358	0.587	25
-8taxa_1order_gammaMedian_k8	8	1.0	100000	2	discreteGammaMedian	8	3.358	0.587	25
+8taxa_1order_gammaMedian_k2	8	1.0	10000	2	discreteGammaMedian	2	3.358	0.587	25
+8taxa_1order_gammaMedian_k4	8	1.0	10000	2	discreteGammaMedian	4	3.358	0.587	25
+8taxa_1order_gammaMedian_k8	8	1.0	10000	2	discreteGammaMedian	8	3.358	0.587	25
 # Discrete Lognormal Median
-8taxa_1order_lognormalMedian_k2	8	1.0	100000	2	discreteLognormalMedian	2	3.358	0.587	25
-8taxa_1order_lognormalMedian_k4	8	1.0	100000	2	discreteLognormalMedian	4	3.358	0.587	25
-8taxa_1order_lognormalMedian_k8	8	1.0	100000	2	discreteLognormalMedian	8	3.358	0.587	25
+8taxa_1order_lognormalMedian_k2	8	1.0	10000	2	discreteLognormalMedian	2	3.358	0.587	25
+8taxa_1order_lognormalMedian_k4	8	1.0	10000	2	discreteLognormalMedian	4	3.358	0.587	25
+8taxa_1order_lognormalMedian_k8	8	1.0	10000	2	discreteLognormalMedian	8	3.358	0.587	25
 #######################################################################################################
 # 8 TAXA - 2 ORDERS OF MAGNITUDE (Medium heterogeneity)
 #######################################################################################################
 # Continuous models
-8taxa_2order_continuousGamma	8	1.0	100000	2	continuousGamma	0	1.117	1.175	25
-8taxa_2order_continuousLognormal	8	1.0	100000	2	continuousLognormal	0	1.117	1.175	25
+8taxa_2order_continuousGamma	8	1.0	10000	2	continuousGamma	0	1.117	1.175	25
+8taxa_2order_continuousLognormal	8	1.0	10000	2	continuousLognormal	0	1.117	1.175	25
 # Discrete Gamma Mean
-8taxa_2order_gammaMean_k2	8	1.0	100000	2	discreteGammaMean	2	1.117	1.175	25
-8taxa_2order_gammaMean_k4	8	1.0	100000	2	discreteGammaMean	4	1.117	1.175	25
-8taxa_2order_gammaMean_k8	8	1.0	100000	2	discreteGammaMean	8	1.117	1.175	25
+8taxa_2order_gammaMean_k2	8	1.0	10000	2	discreteGammaMean	2	1.117	1.175	25
+8taxa_2order_gammaMean_k4	8	1.0	10000	2	discreteGammaMean	4	1.117	1.175	25
+8taxa_2order_gammaMean_k8	8	1.0	10000	2	discreteGammaMean	8	1.117	1.175	25
 # Discrete Gamma Median
-8taxa_2order_gammaMedian_k2	8	1.0	100000	2	discreteGammaMedian	2	1.117	1.175	25
-8taxa_2order_gammaMedian_k4	8	1.0	100000	2	discreteGammaMedian	4	1.117	1.175	25
-8taxa_2order_gammaMedian_k8	8	1.0	100000	2	discreteGammaMedian	8	1.117	1.175	25
+8taxa_2order_gammaMedian_k2	8	1.0	10000	2	discreteGammaMedian	2	1.117	1.175	25
+8taxa_2order_gammaMedian_k4	8	1.0	10000	2	discreteGammaMedian	4	1.117	1.175	25
+8taxa_2order_gammaMedian_k8	8	1.0	10000	2	discreteGammaMedian	8	1.117	1.175	25
 # Discrete Lognormal Median
-8taxa_2order_lognormalMedian_k2	8	1.0	100000	2	discreteLognormalMedian	2	1.117	1.175	25
-8taxa_2order_lognormalMedian_k4	8	1.0	100000	2	discreteLognormalMedian	4	1.117	1.175	25
-8taxa_2order_lognormalMedian_k8	8	1.0	100000	2	discreteLognormalMedian	8	1.117	1.175	25
+8taxa_2order_lognormalMedian_k2	8	1.0	10000	2	discreteLognormalMedian	2	1.117	1.175	25
+8taxa_2order_lognormalMedian_k4	8	1.0	10000	2	discreteLognormalMedian	4	1.117	1.175	25
+8taxa_2order_lognormalMedian_k8	8	1.0	10000	2	discreteLognormalMedian	8	1.117	1.175	25
 #######################################################################################################
 # 8 TAXA - 3 ORDERS OF MAGNITUDE (High heterogeneity)
 #######################################################################################################
 # Continuous models
-8taxa_3order_continuousGamma	8	1.0	100000	2	continuousGamma	0	0.649	1.762	25
-8taxa_3order_continuousLognormal	8	1.0	100000	2	continuousLognormal	0	0.649	1.762	25
+8taxa_3order_continuousGamma	8	1.0	10000	2	continuousGamma	0	0.649	1.762	25
+8taxa_3order_continuousLognormal	8	1.0	10000	2	continuousLognormal	0	0.649	1.762	25
 # Discrete Gamma Mean
-8taxa_3order_gammaMean_k2	8	1.0	100000	2	discreteGammaMean	2	0.649	1.762	25
-8taxa_3order_gammaMean_k4	8	1.0	100000	2	discreteGammaMean	4	0.649	1.762	25
-8taxa_3order_gammaMean_k8	8	1.0	100000	2	discreteGammaMean	8	0.649	1.762	25
+8taxa_3order_gammaMean_k2	8	1.0	10000	2	discreteGammaMean	2	0.649	1.762	25
+8taxa_3order_gammaMean_k4	8	1.0	10000	2	discreteGammaMean	4	0.649	1.762	25
+8taxa_3order_gammaMean_k8	8	1.0	10000	2	discreteGammaMean	8	0.649	1.762	25
 # Discrete Gamma Median
-8taxa_3order_gammaMedian_k2	8	1.0	100000	2	discreteGammaMedian	2	0.649	1.762	25
-8taxa_3order_gammaMedian_k4	8	1.0	100000	2	discreteGammaMedian	4	0.649	1.762	25
-8taxa_3order_gammaMedian_k8	8	1.0	100000	2	discreteGammaMedian	8	0.649	1.762	25
+8taxa_3order_gammaMedian_k2	8	1.0	10000	2	discreteGammaMedian	2	0.649	1.762	25
+8taxa_3order_gammaMedian_k4	8	1.0	10000	2	discreteGammaMedian	4	0.649	1.762	25
+8taxa_3order_gammaMedian_k8	8	1.0	10000	2	discreteGammaMedian	8	0.649	1.762	25
 # Discrete Lognormal Median
-8taxa_3order_lognormalMedian_k2	8	1.0	100000	2	discreteLognormalMedian	2	0.649	1.762	25
-8taxa_3order_lognormalMedian_k4	8	1.0	100000	2	discreteLognormalMedian	4	0.649	1.762	25
-8taxa_3order_lognormalMedian_k8	8	1.0	100000	2	discreteLognormalMedian	8	0.649	1.762	25
+8taxa_3order_lognormalMedian_k2	8	1.0	10000	2	discreteLognormalMedian	2	0.649	1.762	25
+8taxa_3order_lognormalMedian_k4	8	1.0	10000	2	discreteLognormalMedian	4	0.649	1.762	25
+8taxa_3order_lognormalMedian_k8	8	1.0	10000	2	discreteLognormalMedian	8	0.649	1.762	25
 #######################################################################################################
 # 64 TAXA - 1 ORDER OF MAGNITUDE (Low heterogeneity)
 #######################################################################################################
 # Continuous models
-64taxa_1order_continuousGamma	64	1.0	100000	2	continuousGamma	0	3.358	0.587	25
-64taxa_1order_continuousLognormal	64	1.0	100000	2	continuousLognormal	0	3.358	0.587	25
+64taxa_1order_continuousGamma	64	1.0	10000	2	continuousGamma	0	3.358	0.587	25
+64taxa_1order_continuousLognormal	64	1.0	10000	2	continuousLognormal	0	3.358	0.587	25
 # Discrete Gamma Mean
-64taxa_1order_gammaMean_k2	64	1.0	100000	2	discreteGammaMean	2	3.358	0.587	25
-64taxa_1order_gammaMean_k4	64	1.0	100000	2	discreteGammaMean	4	3.358	0.587	25
-64taxa_1order_gammaMean_k8	64	1.0	100000	2	discreteGammaMean	8	3.358	0.587	25
+64taxa_1order_gammaMean_k2	64	1.0	10000	2	discreteGammaMean	2	3.358	0.587	25
+64taxa_1order_gammaMean_k4	64	1.0	10000	2	discreteGammaMean	4	3.358	0.587	25
+64taxa_1order_gammaMean_k8	64	1.0	10000	2	discreteGammaMean	8	3.358	0.587	25
 # Discrete Gamma Median
-64taxa_1order_gammaMedian_k2	64	1.0	100000	2	discreteGammaMedian	2	3.358	0.587	25
-64taxa_1order_gammaMedian_k4	64	1.0	100000	2	discreteGammaMedian	4	3.358	0.587	25
-64taxa_1order_gammaMedian_k8	64	1.0	100000	2	discreteGammaMedian	8	3.358	0.587	25
+64taxa_1order_gammaMedian_k2	64	1.0	10000	2	discreteGammaMedian	2	3.358	0.587	25
+64taxa_1order_gammaMedian_k4	64	1.0	10000	2	discreteGammaMedian	4	3.358	0.587	25
+64taxa_1order_gammaMedian_k8	64	1.0	10000	2	discreteGammaMedian	8	3.358	0.587	25
 # Discrete Lognormal Median
-64taxa_1order_lognormalMedian_k2	64	1.0	100000	2	discreteLognormalMedian	2	3.358	0.587	25
-64taxa_1order_lognormalMedian_k4	64	1.0	100000	2	discreteLognormalMedian	4	3.358	0.587	25
-64taxa_1order_lognormalMedian_k8	64	1.0	100000	2	discreteLognormalMedian	8	3.358	0.587	25
+64taxa_1order_lognormalMedian_k2	64	1.0	10000	2	discreteLognormalMedian	2	3.358	0.587	25
+64taxa_1order_lognormalMedian_k4	64	1.0	10000	2	discreteLognormalMedian	4	3.358	0.587	25
+64taxa_1order_lognormalMedian_k8	64	1.0	10000	2	discreteLognormalMedian	8	3.358	0.587	25
 #######################################################################################################
 # 64 TAXA - 2 ORDERS OF MAGNITUDE (Medium heterogeneity)
 #######################################################################################################
 # Continuous models
-64taxa_2order_continuousGamma	64	1.0	100000	2	continuousGamma	0	1.117	1.175	25
-64taxa_2order_continuousLognormal	64	1.0	100000	2	continuousLognormal	0	1.117	1.175	25
+64taxa_2order_continuousGamma	64	1.0	10000	2	continuousGamma	0	1.117	1.175	25
+64taxa_2order_continuousLognormal	64	1.0	10000	2	continuousLognormal	0	1.117	1.175	25
 # Discrete Gamma Mean
-64taxa_2order_gammaMean_k2	64	1.0	100000	2	discreteGammaMean	2	1.117	1.175	25
-64taxa_2order_gammaMean_k4	64	1.0	100000	2	discreteGammaMean	4	1.117	1.175	25
-64taxa_2order_gammaMean_k8	64	1.0	100000	2	discreteGammaMean	8	1.117	1.175	25
+64taxa_2order_gammaMean_k2	64	1.0	10000	2	discreteGammaMean	2	1.117	1.175	25
+64taxa_2order_gammaMean_k4	64	1.0	10000	2	discreteGammaMean	4	1.117	1.175	25
+64taxa_2order_gammaMean_k8	64	1.0	10000	2	discreteGammaMean	8	1.117	1.175	25
 # Discrete Gamma Median
-64taxa_2order_gammaMedian_k2	64	1.0	100000	2	discreteGammaMedian	2	1.117	1.175	25
-64taxa_2order_gammaMedian_k4	64	1.0	100000	2	discreteGammaMedian	4	1.117	1.175	25
-64taxa_2order_gammaMedian_k8	64	1.0	100000	2	discreteGammaMedian	8	1.117	1.175	25
+64taxa_2order_gammaMedian_k2	64	1.0	10000	2	discreteGammaMedian	2	1.117	1.175	25
+64taxa_2order_gammaMedian_k4	64	1.0	10000	2	discreteGammaMedian	4	1.117	1.175	25
+64taxa_2order_gammaMedian_k8	64	1.0	10000	2	discreteGammaMedian	8	1.117	1.175	25
 # Discrete Lognormal Median
-64taxa_2order_lognormalMedian_k2	64	1.0	100000	2	discreteLognormalMedian	2	1.117	1.175	25
-64taxa_2order_lognormalMedian_k4	64	1.0	100000	2	discreteLognormalMedian	4	1.117	1.175	25
-64taxa_2order_lognormalMedian_k8	64	1.0	100000	2	discreteLognormalMedian	8	1.117	1.175	25
+64taxa_2order_lognormalMedian_k2	64	1.0	10000	2	discreteLognormalMedian	2	1.117	1.175	25
+64taxa_2order_lognormalMedian_k4	64	1.0	10000	2	discreteLognormalMedian	4	1.117	1.175	25
+64taxa_2order_lognormalMedian_k8	64	1.0	10000	2	discreteLognormalMedian	8	1.117	1.175	25
 #######################################################################################################
 # 64 TAXA - 3 ORDERS OF MAGNITUDE (High heterogeneity)
 #######################################################################################################
 # Continuous models
-64taxa_3order_continuousGamma	64	1.0	100000	2	continuousGamma	0	0.649	1.762	25
-64taxa_3order_continuousLognormal	64	1.0	100000	2	continuousLognormal	0	0.649	1.762	25
+64taxa_3order_continuousGamma	64	1.0	10000	2	continuousGamma	0	0.649	1.762	25
+64taxa_3order_continuousLognormal	64	1.0	10000	2	continuousLognormal	0	0.649	1.762	25
 # Discrete Gamma Mean
-64taxa_3order_gammaMean_k2	64	1.0	100000	2	discreteGammaMean	2	0.649	1.762	25
-64taxa_3order_gammaMean_k4	64	1.0	100000	2	discreteGammaMean	4	0.649	1.762	25
-64taxa_3order_gammaMean_k8	64	1.0	100000	2	discreteGammaMean	8	0.649	1.762	25
+64taxa_3order_gammaMean_k2	64	1.0	10000	2	discreteGammaMean	2	0.649	1.762	25
+64taxa_3order_gammaMean_k4	64	1.0	10000	2	discreteGammaMean	4	0.649	1.762	25
+64taxa_3order_gammaMean_k8	64	1.0	10000	2	discreteGammaMean	8	0.649	1.762	25
 # Discrete Gamma Median
-64taxa_3order_gammaMedian_k2	64	1.0	100000	2	discreteGammaMedian	2	0.649	1.762	25
-64taxa_3order_gammaMedian_k4	64	1.0	100000	2	discreteGammaMedian	4	0.649	1.762	25
-64taxa_3order_gammaMedian_k8	64	1.0	100000	2	discreteGammaMedian	8	0.649	1.762	25
+64taxa_3order_gammaMedian_k2	64	1.0	10000	2	discreteGammaMedian	2	0.649	1.762	25
+64taxa_3order_gammaMedian_k4	64	1.0	10000	2	discreteGammaMedian	4	0.649	1.762	25
+64taxa_3order_gammaMedian_k8	64	1.0	10000	2	discreteGammaMedian	8	0.649	1.762	25
 # Discrete Lognormal Median
-64taxa_3order_lognormalMedian_k2	64	1.0	100000	2	discreteLognormalMedian	2	0.649	1.762	25
-64taxa_3order_lognormalMedian_k4	64	1.0	100000	2	discreteLognormalMedian	4	0.649	1.762	25
-64taxa_3order_lognormalMedian_k8	64	1.0	100000	2	discreteLognormalMedian	8	0.649	1.762	25
+64taxa_3order_lognormalMedian_k2	64	1.0	10000	2	discreteLognormalMedian	2	0.649	1.762	25
+64taxa_3order_lognormalMedian_k4	64	1.0	10000	2	discreteLognormalMedian	4	0.649	1.762	25
+64taxa_3order_lognormalMedian_k8	64	1.0	10000	2	discreteLognormalMedian	8	0.649	1.762	25
 #######################################################################################################
