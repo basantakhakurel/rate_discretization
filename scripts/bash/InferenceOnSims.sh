@@ -94,14 +94,19 @@ get_inference_models() {
     esac
 }
 
-# Partition/memory tier by inf_k.
-# krypton node ratio ~8GB/core -> 16G for 2 cores. lemmium 16GB/core -> can go higher if needed.
+# partition and memory by n_taxa + inf_k.
+# n_taxa=8 @ 10000 sites, 4 chains, all inf_k up to 100 works at 8G (v1/scripts/bash_scripts/run_Inference_SLURM.sh).
+# n_taxa=64 has more branches (2*64-3 vs 2*8-3) than n_taxa=8 -> untested, conservative placeholders below.
 get_resources_for_k() {
-    case "$1" in
-        2|4)    echo "krypton 8G" ;;
-        8)      echo "krypton 16G" ;;
-        16|100) echo "lemmium 32G" ;;
-        *)      echo "krypton 16G" ;;
+    local n_taxa="$1" inf_k="$2"
+    if [[ "$n_taxa" == "8" ]]; then
+        echo "krypton 8G"
+        return
+    fi
+    case "$inf_k" in
+        2|4|8)  echo "krypton 24G" ;;
+        16|100) echo "lemmium 48G" ;;
+        *)      echo "krypton 24G" ;;
     esac
 }
 
@@ -133,7 +138,7 @@ while IFS=$'\t' read -r scenario_id n_taxa expected_tl n_sites n_states rate_mod
                     ((SKIPPED_DONE++)) || true
                     continue
                 fi
-                read -r partition mem <<< "$(get_resources_for_k "$inf_k")"
+                read -r partition mem <<< "$(get_resources_for_k "$n_taxa" "$inf_k")"
                 ALL_PARAMS+=("${scenario_id}\t${rep}\t${inf_model}\t${inf_k}\t${n_states}\t${dataset_file}")
                 ALL_TIERS+=("${partition}_${mem}")
             done
@@ -188,7 +193,7 @@ if [[ "$COMPUTE_RESOURCE" == "palmuc" ]]; then
 #SBATCH --output=${SLURM_LOGS}/inf_${tier_key}_%A_%a.out
 #SBATCH --error=${SLURM_LOGS}/inf_${tier_key}_%A_%a.err
 #SBATCH --nodes=1
-#SBATCH --ntasks=2
+#SBATCH --ntasks=4
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=${mem}
 #SBATCH --qos=normal_prio
@@ -215,7 +220,7 @@ mkdir -p "\${OUTPUT_DIR}"
 
 srun rb-mpi "${MCMC_SCRIPT}" \\
         "\${scenario_id}_rep_\${rep}" "\${dataset_file}" "\${inf_model}" \\
-        "\${OUTPUT_DIR}" 2 "\${inf_k}" "${MODELS_DIR}" "\${n_states}"
+        "\${OUTPUT_DIR}" 4 "\${inf_k}" "${MODELS_DIR}" "\${n_states}"
 
 printf '%s  Done: %s rep %s %s k%s\n' "\$(date '+%F %T')" "\$scenario_id" "\$rep" "\$inf_model" "\$inf_k"
 EOF
