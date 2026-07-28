@@ -110,10 +110,10 @@ get_resources_for_k() {
     esac
 }
 
-declare -a ALL_PARAMS=()
-declare -a ALL_TIERS=()
-MISSING_DATA=0
-SKIPPED_DONE=0
+# running reps for different scenarios first and then only moving to the second rep
+# previously it was running all the reps for a single scenario first (which is not ideal)
+declare -a SCEN_ID=() SCEN_NTAXA=() SCEN_NSTATES=() SCEN_MODELS=() SCEN_NREPS=()
+MAX_N_REPS=0
 
 while IFS=$'\t' read -r scenario_id n_taxa expected_tl n_sites n_states rate_model num_categories alpha sigma n_reps; do
     [[ -z "$scenario_id" || "$scenario_id" =~ ^# ]] && continue
@@ -122,9 +122,29 @@ while IFS=$'\t' read -r scenario_id n_taxa expected_tl n_sites n_states rate_mod
 
     models_str=$(get_inference_models "$rate_model")
     [[ -z "$models_str" ]] && { echo "Warning: unknown rate_model '$rate_model' for '$scenario_id', skipping." >&2; continue; }
-    read -ra models <<< "$models_str"
 
-    for rep in $(seq 1 "$n_reps"); do
+    SCEN_ID+=("$scenario_id")
+    SCEN_NTAXA+=("$n_taxa")
+    SCEN_NSTATES+=("$n_states")
+    SCEN_MODELS+=("$models_str")
+    SCEN_NREPS+=("$n_reps")
+    (( n_reps > MAX_N_REPS )) && MAX_N_REPS="$n_reps"
+done < "$SCENARIOS_FILE"
+
+declare -a ALL_PARAMS=()
+declare -a ALL_TIERS=()
+MISSING_DATA=0
+SKIPPED_DONE=0
+
+for (( rep=1; rep<=MAX_N_REPS; rep++ )); do
+    for i in "${!SCEN_ID[@]}"; do
+        scenario_id="${SCEN_ID[$i]}"
+        n_taxa="${SCEN_NTAXA[$i]}"
+        n_states="${SCEN_NSTATES[$i]}"
+        n_reps="${SCEN_NREPS[$i]}"
+        (( rep > n_reps )) && continue
+        read -ra models <<< "${SCEN_MODELS[$i]}"
+
         dataset_file="${INPUT_ROOT}/${scenario_id}/data/rep_${rep}/sim_1.nex"
         if [[ ! -f "$dataset_file" ]] && [[ "$DRY_RUN" != "true" ]]; then
             ((MISSING_DATA++)) || true
@@ -144,7 +164,7 @@ while IFS=$'\t' read -r scenario_id n_taxa expected_tl n_sites n_states rate_mod
             done
         done
     done
-done < "$SCENARIOS_FILE"
+done
 
 NUM_JOBS="${#ALL_PARAMS[@]}"
 printf '%s  Found %d inference jobs to run (%d already completed, skipped).\n' \
