@@ -18,6 +18,7 @@ logs/
 SimData/*
 slurm/params/
 slurm/scripts/
+ArchivedExtraReps/
 Analyses/*
 # plots
 *.pdf
