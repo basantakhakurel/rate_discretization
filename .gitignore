@@ -43,6 +43,7 @@ history.txt
 
 # mac identifier file
 .DS_Store
+copyFromCluster.sh
 
-
-
+AnalysesSummarize.sh
+**analysis**
