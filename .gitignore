@@ -13,7 +13,7 @@
 slurm_*
 test*
 output/
-Notes*
+Note*
 logs/
 SimData/*
 slurm/params/
