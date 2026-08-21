@@ -1,5 +1,5 @@
 # some directories and files to ignore
-/Plots
+**/Plots/*
 /plots
 /Extra_Plots
 /archive
