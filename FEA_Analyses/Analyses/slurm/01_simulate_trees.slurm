@@ -19,10 +19,9 @@ echo "========================================"
 
 module purge
 module load gnu/12
-module load prebin/kry
 module load R/4.4.2
 
-export R_LIBS_USER=\$HOME/R_libs
+export R_LIBS_USER=$HOME/R_libs
 
 TREE_SCRIPT="${ANALYSES_DIR}/scripts/trees_simulate.R"
 export FORCE_TREES="${FORCE_TREES:-0}"
