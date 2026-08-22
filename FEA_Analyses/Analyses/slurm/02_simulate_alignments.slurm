@@ -60,7 +60,7 @@ else
   iqtree2 --alisim "${CONT_PREFIX}" \
     -t "${TREE_FILE}" \
     -m "GTR+F{0.25,0.25,0.25,0.25}+GC{${ALPHA}}" \
-    --length 2500 \
+    --length 25000 \
     --quiet -redo
   echo "  Done: ${CONT_PREFIX}.phy"
 fi
@@ -72,7 +72,7 @@ else
   iqtree2 --alisim "${DISC_PREFIX}" \
     -t "${TREE_FILE}" \
     -m "GTR+F{0.25,0.25,0.25,0.25}+G4{${ALPHA}}" \
-    --length 2500 \
+    --length 25000 \
     --quiet -redo
   echo "  Done: ${DISC_PREFIX}.phy"
 fi
