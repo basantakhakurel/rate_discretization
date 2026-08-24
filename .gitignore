@@ -10,7 +10,7 @@
 /tmp
 **/sim_*/**
 /Junk_Output
-slurm_*
+**/slurm/**
 test*
 output/
 Note*
